@@ -27,6 +27,20 @@ function inicializar(){
 	InicializarIdiomas();
 	comprobarTablas();	
 	
+	// Initialize the Facebook SDK
+	try{	  
+		FB.init({
+			appId: '471428772926328',
+			nativeInterface: CDV.FB,
+			useCachedDialogs: false
+		});	
+		FB.getLoginStatus(handleStatusChange);
+		authUser();
+		updateAuthElements();
+	}catch(e){
+		navigator.notification.alert("Error: "+e);
+	}
+		
 	
 	//Aplicamos estilos mediante jquery
 	$('div.ContenidoTutorial > p').addClass("letraMediana");
@@ -94,18 +108,10 @@ function inicializar(){
 	getAccesToken();
   	// Get a new one every 9 minutes.
   	setInterval(getAccesToken, 9 * 60 * 1000);
-  	
-  		// Initialize the Facebook SDK	  
-	FB.init({
-		appId: '471428772926328',
-		nativeInterface: CDV.FB,
-		useCachedDialogs: false
-	});
-	FB.getLoginStatus(handleStatusChange);
-	authUser();
-	updateAuthElements();
+  	navigator.splashscreen.hide();
+  
 	
-	navigator.splashscreen.hide();
+	
 }
 /*
  * Este método controla la pulsación del botón atrás en los dispositivos que lo tengan disponible
