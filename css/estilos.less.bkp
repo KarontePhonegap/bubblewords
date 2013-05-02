@@ -1,0 +1,502 @@
+/* IMPORTACIONES */
+@import "botones.less";
+@import "fondos.less";
+@import "fuentes.less";
+@import "formularios.less";
+
+/* COLORES */
+@ColorBlanco:#ffffff;
+
+/* VARIOS */
+@SombraTexto: #000000 2px 2px 5px;
+.ContenidoInternoTutorial{
+    background-repeat:no-repeat;
+    position:fixed;
+    a{
+        padding:10px;
+        @media (max-width: 640px){
+            padding:5px !important;
+        }
+        @media (max-width: 320px){
+            padding:2px !important;
+        }
+    }
+    div{
+        &.ContenidoTutorial{
+            float:left;
+            height:750px;
+            @media (max-width: 640px){
+                height:680px !important;
+            }
+            @media (max-width: 320px){
+                height:340px !important;
+            }
+            width:100%;
+        }
+        &.BotonesTutorial{
+            float:left;
+            padding: 0 30px 0 60px;
+            @media (max-width: 640px){
+                padding: 0 15px 0 15px !important;
+            }
+            @media (max-width: 320px){
+                padding: 0 5px 0 5px !important;
+            }
+            text-align:right;
+        }
+    }
+    h3{
+        font-size: 120px;
+        @media (max-width:640px){
+            font-size:100px !important;
+        }
+        @media (max-width:320px){
+            font-size:48px !important;
+        }
+        text-align:center;
+        width:100%;
+    }
+    h5{
+        font-size: 70px;
+        @media (max-width:640px){
+            font-size: 60px !important;
+        }
+        @media (max-width:320px){
+            font-size: 28px !important;
+        }
+        text-align:center;
+        width:100%;
+    }
+    img{
+        background-repeat:no-repeat;
+        &.atras{
+            background-image: url("../img/tutorial/btnTutorialAtras_1024.png");
+            height:72px;
+            width:62px;
+            @media (max-width: 640px){
+                background-image:url("../img/tutorial/btnTutorialAtras_640.png") !important;
+                height:62px !important;
+                width:53px !important;
+            }
+            @media (max-width: 320px){
+                background-image:url("../img/tutorial/btnTutorialAtras_320.png") !important;
+                height:32px !important;
+                width:28px !important;
+            }
+        }
+        &.delante{
+            background-image: url("../img/tutorial/btnTutorialDelante_1024.png");
+            height:72px;
+            width:62px;
+            @media (max-width: 640px){
+                background-image:url("../img/tutorial/btnTutorialDelante_640.png") !important;
+                height:62px !important;
+                width:53px !important;
+            }
+            @media (max-width: 320px){
+                background-image:url("../img/tutorial/btnTutorialDelante_320.png") !important;
+                height:32px !important;
+                width:28px !important;
+            }
+        }
+        &.puntoBlanco{
+            background-image: url("../img/tutorial/btnPuntoTutorial_1024.png");
+            height:72px;
+            width:72px;
+            @media (max-width: 640px){
+                background-image: url("../img/tutorial/btnPuntoTutorial_640.png") !important;
+                height:62px !important;
+                width:62px !important;
+            }
+            @media (max-width: 320px){
+                background-image: url("../img/tutorial/btnPuntoTutorial_320.png") !important;
+                height:32px !important;
+                width:32px !important;
+            }
+        }
+        &.puntoNegro{
+            background-image: url("../img/tutorial/btnPuntoNegroTutorial_1024.png");
+            height:72px;
+            width:72px;
+            @media (max-width: 640px){
+                background-image: url("../img/tutorial/btnPuntoNegroTutorial_640.png") !important;
+                height:62px !important;
+                width:62px !important;
+            }
+            @media (max-width: 320px){
+                background-image: url("../img/tutorial/btnPuntoNegroTutorial_320.png") !important;
+                height:32px !important;
+                width:32px !important;
+            }
+        }
+    }
+    p{
+        font-size: 45px;
+        line-height:60px;
+        padding:25px;
+        text-align:justify;
+        @media (max-width: 640px){
+            font-size: 38px !important;
+            line-height:45px !important;
+            padding: 18px !important;
+        }
+        @media (max-width: 320px){
+            font-size:18px !important;
+            line-height:24px !important;
+            padding:10px !important;
+        }
+    }
+}
+.MostrarEniPhone3(@ancho:320px){
+    display:none;
+    @media (max-width: @ancho) {
+        display:block;
+    }
+}
+.MostrarEniPhone4(@ancho:640px){
+    display:none;
+    @media (max-width: @ancho) {
+        display:block;
+    }
+}
+.MostrarEniPad(@ancho:768px){
+    display:none;
+    @media (max-width: @ancho) {
+        display:block;
+    }
+}
+.OcultarEniPad(@ancho:768x){
+     @media (max-width: @ancho) {
+        display:none !important;
+    }
+}
+.RedondearBordes(@dimension:30px){
+    border-radius: @dimension;
+    @media(max-width:640px){
+        border-radius: (@dimension * 0.75) !important;
+    }
+    @media(max-width:320px){
+        border-radius: (@dimension * 0.5) !important;
+    }
+}
+.SombraCapa(@radius:10px){
+    color:#444;
+    -webkit-box-shadow: @radius @radius @radius rgba(0, 0, 0, 1);
+    -moz-box-shadow: @radius @radius @radius rgba(0, 0, 0, 1);
+    box-shadow: @radius @radius @radius rgba(0, 0, 0, 1);   
+}
+
+/* DEFINICIÓN DE ETIQUETAS HTML */
+body{   
+    background:#1a3935 url("../img/fondo_768.jpg") top left !important;   
+   
+    /*@media (max-width:640px){   // Fondo del iPhone4
+        background: #1a3935 url("../img/fondo_640.jpg") no-repeat top left !important;   
+    }
+    @media (max-width:320px){ // Fondo del iPhone3
+        background:#1a3935 url("../img/fondo_320.jpg") no-repeat top left !important; 
+    
+    }*/   
+}
+h2{
+    @media(max-width:768px){
+        font-size: 50px !important;
+    }
+    @media(max-width:640px){
+        font-size: 35px !important;
+    }
+}
+div[data-theme=a]{
+    h4{
+        color: #555555;
+        margin:40px 0 20px 0;
+        text-shadow:none;
+        @media(max-width:640px){
+            font-size: 35px !important;   
+        }
+        @media(max-width:320px){
+            font-size: 22px !important;   
+        }
+    }
+    p{
+        color:#555555;
+        text-shadow:none;
+    }
+}
+h4{
+    @media(max-width:768px){
+        font-size: 35px !important;
+    }
+    @media(max-width:640px){
+        font-size: 28px !important;
+    }
+}
+li{
+    h3{
+        overflow:visible !important;
+        @media(max-width:768px){
+            font-size: 30px !important;
+        }
+        @media(max-width:640px){
+            font-size: 20px !important;
+        }
+    }
+    p{
+        @media(max-width:768px){
+            font-size: 20px !important;
+        }
+        @media(max-width:640px){
+            font-size: 16px !important;
+        }
+    }
+}
+
+/* DEFINICIÓN DE IDENTIFICADORES DE ELEMENTOS */
+#imgGrabar{
+    background-image:url('../img/btn/grabar_768.png');
+    background-repeat:no-repeat;
+    display:block;
+    height:73px;
+    width:73px;
+    @media(max-width:640px){
+        background-image:url('../img/btn/grabar_640.png') !important;
+        height:73px !important;
+        width:73px !important;
+    }
+    @media(max-width:320px){
+        background-image:url('../img/btn/grabar_320.png') !important;
+        heigth:35px !important;
+        widht:35px !important;
+    }
+}
+#imgMicrofono{
+    background-image:url('../img/microfono_768.png');
+    background-repeat:no-repeat;
+    display:block;
+    height:792px;
+    width:332px;
+    @media(max-width:640px){
+        background-image:url('../img/microfono_640.png') !important;
+        height:796px !important;
+        width:322px !important;
+    }
+    @media(max-width:320px){
+        background-image:url('../img/microfono_320.png') !important;
+        height:402px !important;
+        width:168px !important;
+    }
+}
+#imgPararGrabacion{
+    background-image:url('../img/btn/pararGrabacion_768.png');
+    background-repeat:no-repeat;
+    display:block;
+    height:73px;
+    width:73px;
+    @media(max-width:640px){
+        background-image:url('../img/btn/pararGrabacion_640.png') !important;
+        height:73px !important;
+        width:73px !important;
+    }
+    @media(max-width:320px){
+        background-image:url('../img/btn/pararGrabacion_320.png') !important;
+        height:35px !important;
+        width:35px !important;
+    }
+}
+#PaginaNuevaTarjeta, #PaginaNuevaCategoria{
+    background:#ffffff !important;   
+}
+#PaginaConfirmarEliminaCategoria, #PaginaConfirmarEliminaTarjeta, #PaginaConfirmarEliminarTodo{
+    background: #000000 !important;
+}
+#PaginaDetalleTarjeta{
+    h2,h4{
+        text-align:center;   
+        width:100%;
+    }
+}
+
+#PaginaReversoTarjeta{
+    h2,h4{
+        text-align:center;   
+        width:100%;
+    }
+}
+
+#PaginaTutorial1_content{
+    .ContenidoInternoTutorial;
+    
+    background-image: url('../img/tutorial/FondoTutorial1_1024.png');
+    @media(max-width:640px){
+        background-image: url('../img/tutorial/FondoTutorial1_640.png') !important;   
+    }
+    @media (max-width:320px){
+        background-image: url('../img/tutorial/FondoTutorial1_320.png') !important;
+    }  
+}
+#PaginaTutorial3_content{
+    .ContenidoInternoTutorial;
+    background-image: url('../img/tutorial/FondoTutorial3_1024.png');
+    @media(max-width:640px){
+        background-image: url('../img/tutorial/FondoTutorial3_640.png') !important;   
+    }
+    @media (max-width:320px){
+        background-image: url('../img/tutorial/FondoTutorial3_320.png') !important;
+    }
+}
+#PaginaTutorial4_content{
+    .ContenidoInternoTutorial;
+    background-image: url('../img/tutorial/FondoTutorial4_1024.png');
+    @media(max-width:640px){
+        background-image: url('../img/tutorial/FondoTutorial4_640.png') !important;   
+    }
+    @media (max-width:320px){
+        background-image: url('../img/tutorial/FondoTutorial4_320.png') !important;
+    }
+}
+#PaginaTutorial5_content{
+    .ContenidoInternoTutorial;
+    background-image: url('../img/tutorial/FondoTutorial5_1024.png');
+    @media(max-width:640px){
+        background-image: url('../img/tutorial/FondoTutorial5_640.png') !important;   
+    }
+    @media (max-width:320px){
+        background-image: url('../img/tutorial/FondoTutorial5_320.png') !important;
+    }
+}
+#PaginaTutorial6_content{
+    .ContenidoInternoTutorial;
+    background-image: url('../img/tutorial/FondoTutorial6_1024.png');
+    @media(max-width:640px){
+        background-image: url('../img/tutorial/FondoTutorial6_640.png') !important;   
+    }
+    @media (max-width:320px){
+        background-image: url('../img/tutorial/FondoTutorial6_320.png') !important;
+    }
+}
+
+/* DEFINICIÓN DE CLASES */
+.bordeImagen{
+    float:left;
+    width:45%;
+    @media(max-width:768px){
+        margin: 12px;
+    }
+    @media(max-width:640px){
+        margin: 8px;
+    }
+    @media(max-width:320px){
+        margin:4px;
+    }
+}
+.centrado{
+    text-align:center;
+}
+.conSombra{
+    .SombraCapa(10px);   
+}
+.limpiar{
+    clear:both;   
+}
+.rectanguloFoto{
+    background-color:#ccc;
+    border:2px solid #444;
+    padding: 40px;   
+    @media(max-width:640px){
+        padding: 30px !important;   
+    }
+    @media(max-width:320px){
+        padding: 10px !important;
+    }
+    text-align:center;
+}
+.rectanguloTexto{
+    background-color:#FBBE2F;
+    border: 2px solid #444;
+    margin: 30px;
+    @media(max-width:640px){
+        margin: 20px !important;
+    }
+    @media(max-width:320px){
+        margin: 15px !important;
+    }
+    padding: 20px;   
+    @media(max-width:640px){
+        padding: 15px !important;   
+    }
+    @media(max-width:320px){
+        padding: 7px !important;
+    }
+    .RedondearBordes(40px); 
+    text-align:center;
+}
+.seleccionImagen{
+    float:left;
+    width: 45%;
+}
+.TarjetaConFondo{
+    padding:0;
+    margin:0;
+	background-repeat:no-repeat;
+}
+
+/*--- REESCRITURA DE LAS CLASES JQUERYMOBILE ---*/
+a.ui-btn-left{      // Botón superior
+    margin-top: 5px;  
+    @media(max-width:640px){
+        margin-top: 2px !important;   
+    }
+    @media(max-width:320px){
+        margin-top: 2px !important;
+    }  
+    span{
+        &.ui-btn-inner{
+            padding: 20px 20px 20px 30px;
+            @media(max-width:640px){
+                padding: 10px 10px 10px 20px !important;
+            }   
+            @media(max-width:320px){
+                padding: 5px 5px 5px 25px !important;
+            }
+        }
+        &.ui-btn-text{
+            font-size: 20px;
+            @media(max-width:640px){
+                font-size: 15px !important;
+            }
+            @media(max-width:320px){
+                font-size: 12px !important;
+            }
+        }
+    }
+}
+.ui-header{
+    height:80px;
+    @media (max-width: 640px){
+        height:60px !important;
+    }
+    @media (max-width: 320px){
+        height:40px !important;
+    }
+}
+.ui-li-count{
+    @media(max-width:768px){
+        font-size:20px !important;
+    }
+    @media(max-width:640px){
+        font-size:16px !important;
+    }
+}
+.ui-title{
+    min-height:0 !important;
+    font-size: 2em !important;
+    padding:10px !important;   
+    @media (max-width:640px){
+        font-size: 1.5em !important;
+        padding: 8px !important;
+    }
+    @media (max-width:320px) {
+        font-size: 1.2em !important;
+        padding: 1px !important;
+    }
+}

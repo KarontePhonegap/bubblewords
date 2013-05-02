@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!--<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />-->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, target-densitydpi=device-dpi" />        
+        <title>Bubble Words</title>
+        
+        <!--
+        Cargar JqueryMobile 1.2
+        -->
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.css">        
+        <link rel="stylesheet" type="text/css" href="css/jQueryMobile_BubbleWords.css">
+        <link rel="stylesheet" type="text/css" href="css/bubbleWords2.css">
+        <link rel="stylesheet" type="text/css" href="css/estilos.css">
+        <!--
+        Cargar JqueryMobile 1.2.1
+              
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.1.css">
+        <!--<link rel="stylesheet" type="text/css" href="css/bubbleWords2.css">
+        <link rel="stylesheet" type="text/css" href="css/estilos.css">-->
+    </head>
+    <body >
+        <!-- Página INICIAL -->
+        <div data-role="page" id="PaginaInicial" data-theme="a">
+            <div data-role="header" data-position="fixed" data-theme="a">
+                <h1 id="lblInicio">INICIO</h1>
+            </div>
+            <div data-role="content">
+                <div class="ui-grid-a" style="margin-top:5px;">
+                    <div id="BotonBubbles" class="ui-block-a">
+                        <a href="#PaginaCategorias"><img id="imgBubbles" src="img/transparente.png" /><span>bubbles</span></a>
+                    </div>
+                    <div id="BotonNuevaTarjeta" class="ui-block-b">
+                        <a href="javascript:;" id="lnkNuevaTarjetaPrincipal"><img id="imgNuevaTarjeta" src="img/transparente.png"/><span id="lblNuevaTarjeta">nueva tarjeta</span></a>
+                    </div>
+                    <div id="BotonTutorial" class="ui-block-a limpiar">
+                        <a href="#PaginaTutorial1"><img id="imgTutorial" src="img/transparente.png"/><span id="lblTutorial">tutorial</span></a>
+                    </div>
+                    <div id="BotonFavoritos" class="ui-block-b">
+                        <a href="javascript:;" onClick="CargarCategoria(event, 0, true)" ><img id="imgFavoritos" src="img/transparente.png"/><span id="lblFavoritos">favoritos</span></a>
+                    </div>
+                    <div id="BotonAjustes" class="ui-block-a limpiar" style="width:100%;text-align:center">
+                        <a href="#PaginaAjustes" ><img id="imgAjustes" src="img/transparente.png"/><span id="lblAjustes">ajustes</span></a>
+                    </div>
+                </div>
+                <div class="control-group">
+                	<a href="#" onclick="promptLogin()" id="btnLogin" class="boton-Azul">Facebook Log In</a>
+           		 </div>
+            </div>
+        </div>
+        
+        <!-- Página CATEGORIAS -->
+    <div id="PaginaCategorias" data-role="page" data-theme="a">
+        <div data-role="header" data-position="fixed" data-theme="a">
+        	<!--<a href="javascript:;" data-role="button" data-icon="back" data-theme="b" onTouchStart="Volver(event)">Atrás</a>-->
+        	<a href="#PaginaInicial"  data-theme="b"><i class="icon-chevron-left"></i><i class="icon-home"></i></a>        	
+            <h1 id="lblCategorias">Categorías</h1>
+        </div>
+        <div data-role="content" >            	
+            <ul data-role="listview" id="lstCategorias" data-theme="c">
+            </ul>
+        </div>
+        
+        <div data-role="footer"  data-theme="f">
+        	<div data-role="navbar" data-iconpos="right">
+            	<ul>
+                	<li>
+                        <a data-role="button"  id="btnEditarCategorias"><span id="lblEditarCategoria"><i class="icon-edit"></i></span></a>
+                    </li>
+                    <li>
+                        <a href="#PaginaNuevaCategoria" data-role="button" data-theme="e"><span id="lblNuevaCategoria"><i class="icon-plus"></i></span></a>  
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página AÑADIR CATEGORÍA -->
+    <div id="PaginaNuevaCategoria" data-role="page" data-theme="a">
+    	<div data-role="header" data-position="fixed">
+        	<!--<a href="javascript:;" data-role="button" data-icon="back" data-theme="b" onTouchStart="Volver(event)">Atrás</a>-->
+        	<a href="javascript:;" onTouchStart="Volver(event)" data-theme="b"><i class="icon-chevron-left"></i><i class="icon-home"></i></a> 
+            <h1 id="lblTituloNuevaCategoria">Nueva categoría</h1>
+        </div>
+        <div data-role="content">
+            <div class="control-group">
+                <label for="inputNombreCategoria" class="field-icon-Emerland custom-icon-tag"></label>
+                <input type="text" id="inputNombreCategoria" placeholder="Nombre de la categoría" value="" maxlength="22"/>
+            </div>
+            
+            <div class="control-group">
+                <label for="inputDescripcionCategoria" class="field-icon-Emerland custom-icon-note"></label>
+                <input type="text" id="inputDescripcionCategoria" placeholder="Descripción de la categoría" value=""/>
+            </div>
+            
+            <div class="control-group">
+                <a href="javascript:;" id="btnInsertarCategoria" class="boton-Rojo">INSERTAR CATEGORÍA</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página DETALLE CATEGORÍA -->
+    <div id="PaginaDetalleCategoria" data-role="page" data-theme="a">
+    	<div data-role="header" data-position="fixed">
+            <!--<a href="javascript:;" data-role="button" data-icon="back" data-theme="b" onTouchStart="Volver(event)">Atrás</a>-->
+        	<a href="#PaginaCategorias"  data-theme="b"><i class="icon-chevron-left"></i></a> 
+            <h1 id="h1NombreCategoria"></h1>
+        </div>
+        <div data-role="content">
+            <section class="ui-grid-b" id="lblListaTarjetas">
+            </section>
+        </div>
+        <div data-role="footer" data-theme="f">
+        	<div data-role="navbar" data-iconpos="right">
+            	<ul>
+                	<li>
+                    	<a id="lnkNuevaTarjeta" href="#PaginaNuevaTarjeta" data-role="button"><i class="icon-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página DETALLE TARJETA -->
+    <div id="PaginaDetalleTarjeta" data-role="page" class="TarjetaConFondo">
+    	<div data-role="header" data-position="fixed" id="PaginaDetalleTarjeta_header">
+            <!--<a href="javascript:;" data-role="button" data-icon="back" data-theme="b" onTouchStart="Volver(event)">Atrás</a>-->
+        	<a href="#PaginaDetalleCategoria" data-theme="b"><i class="icon-chevron-left"></i></a> 
+            <h1 id="h1NombreTarjeta">Bubble</h1>
+        </div>
+        <div data-role="content" id="PaginaDetalleTarjeta_content">
+        	<a href="javascript:;" onTouchStart="ReversoTarjeta(event)">
+	        	<div class="rectanguloFoto">	        		
+	        		<img id="imgGrandeTarjeta" class="conSombra"/>	        		
+	        	</div>
+	        	<div style="background-color:#3baefb;margin-top: 5%;text-align: center;color: black;padding: 2%;text-align:center;border-radius:30px;line-height: 200%;  border:solid white 2px;"  class="conSombra">
+	        		<div>
+	        			<div class="jtextfill">
+            				<span class = "tituloTarjeta" id="lblTituloTarjeta" ></span>	            
+            			</div>
+	        		</div>	        		
+	        	</div>   
+            </a>
+        </div>
+        <div data-role="footer" data-position="fixed" data-theme="f" id="PaginaDetalleTarjeta_footer">
+        	<div data-role="navbar" data-iconpos="right">
+            	<ul>
+                	<li>
+                    	<a href="javascript:;" data-role="button" id="btnTarjetaEditar" ><i class="icon-edit"></i></a>
+                    </li>
+                    <li>
+                    	<a href="javascript:;" onClick="ReproducirSonido(event)" 
+                            data-role="button" id="btnTarjetaSonido"><i class="icon-volume-up"></i></a>
+                    </li>
+                    <li>
+                    	<a href="javascript:;" id="btnCambiarTarjetaFavorita" data-role="button"><i class="icon-heart"></i></a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" id="btnEliminaTarjeta" data-role="button"><i class="icon-remove"></i></a>                    	
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página REVERSO TARJETA -->
+    <div id="PaginaReversoTarjeta" data-role="page" class="TarjetaConFondo">
+    	<div data-role="header" data-position="fixed">
+            <!--<a href="javascript:;" data-role="button" data-icon="back" data-theme="b" onTouchStart="Volver(event)">Atrás</a>-->
+        	<a href="#PaginaDetalleCategoria" data-theme="b"><i class="icon-chevron-left"></i></a> 
+            <h1 id="NombreTarjetaReverso">Bubble</h1>
+        </div>
+        <div data-role="content" id="PaginaReversoTarjeta_content">
+        	<a href="javascript:;" onTouchStart="ReproducirSonidoEstatico(event);Volver(event)">
+	        	<div class="rectanguloFoto">        	
+	        		<img id="imgGrandeTarjetaReverso" class="conSombra" />        	
+	        	</div>
+	            <div style="background-color: #FBBE2F; margin-top: 5%; text-align: center; color: black; padding: 2%; text-align:center; border-radius:30px; line-height: 200%; border:solid white 2px;" class="conSombra">
+	        		<div>
+	        			<div class="jtextfillReverso">
+            				<span class = "tituloTarjeta " id="lblTituloTarjetaReverso"></span>	            
+            			</div>
+	        		</div>
+	        		
+	        	</div>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Página NUEVA TARJETA -->
+    <div id="PaginaNuevaTarjeta" data-role="page" data-theme="a">
+    	<div data-role="header" data-position="fixed">
+        	<!--<a href="javascript:;" data-role="button" data-icon="back" data-theme="b" onTouchStart="Volver(event)">Atrás</a>-->
+        	<a href="javascript:;" onclick="Volver(event);tarjetaEnEdicion=false;" data-theme="b"><i class="icon-chevron-left"></i><i class="icon-home"></i></a> 
+            <h1 id="lblTituloNuevaTarjeta">Nuevo Bubble</i></h1>
+        </div>
+        <div data-role="content">
+        	<div id="pnlSeleccionDeCategoria" class="control-group fade in">
+            	<label class="field-icon-Emerland custom-icon-tag" for="inputCategoriaRelacionada"></label>
+                <select id="inputCategoriaRelacionada"></select>
+            </div>
+            
+            <div class="control-group">
+            	<label class="field-icon-Emerland custom-icon-bubble" for="inputTituloTarjeta"></label>
+                <input type="text" id="inputTituloTarjeta" placeholder="Nombre del Bubble" value="" 
+                	onBlur="TraduccionSugerida(event)" onFocus="LimpiarTraduccion(event)" maxlength="30" />
+            </div>
+            
+            <div class="control-group">
+            	<label class="field-icon-Emerland custom-icon-world" for="inputTitulo2Tarjeta"></label>
+                <input type="text" id="inputTitulo2Tarjeta" placeholder="Traducción" value="" 
+                	onFocus="LimpiarTraduccion(event)" onChange="LimpiarTraduccion(event);" maxlength="30"/>
+                <div id="pnlResultadoTraduccion" class="tooltip fade bottom">
+                    <div class="tooltip-arrow"></div>
+                    <div class="tooltip-inner">
+                        <a href="javascript:;" data-role="none" id="btnAplicarTraduccion" class="boton-Aplicar"><span id="lblTraduccionObtenida"></span></a>
+                    </div>
+                </div>	
+            </div>
+            
+            <div class="control-group">
+                <label class="field-icon-Emerland custom-icon-text" for="inputFuente"></label>
+                <select id="inputFuente">
+                	<option value="Arial">Arial</option>
+                    <option value="Audiowide">Audio wide</option>
+                    <option value="BerkshireSwash">Berkshire Swash</option>
+                    <option value="BigelowRules">Bigelow Rules</option>
+                    <option value="CinzelDecorative">Cinzel Decorative</option>
+                    <option value="CourierNew">Courier New</option>
+                    <option value="DaysOne">Days One</option>
+                    <option value="ExpletusSans">Expletus Sans</option>
+                    <option value="FontdinerSwanky">Fontdiner Swanky</option>
+                    <option value="FreckleFace">Freckle Face</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Griffy">Griffy</option>
+                    <option value="Gruppo">Gruppo</option>
+                    <option value="JacquesFrancoisShadow">Jacques Francois Shadow</option>
+                    <option value="JuliusSansOne">Julius Sans One</option>
+                    <option value="LondrinaShadow">Londrina Shadow</option>
+                    <option value="Monofett">Monofett</option>
+                    <option value="Monoton">Monoton</option>
+                    <option value="PinyonScript">PinyonScript</option>
+                    <option value="PlayfairDisplaySC">Playfair Display SC</option>
+                    <option value="PurplePurse">Purple Purse</option>
+                    <option value="RockSalt">Rock Salt</option>
+                    <option value="Sintony">Sintony</option>
+                    <option value="Spirax">Spirax</option>
+                    <option value="StintUltraExpanded">Stint Ultra Expanded</option>
+                    <option value="UnifrakturMaguntia">UnifrakturMaguntia</option>
+                    <option value="TimesNewRoman">Times New Roman</option>
+                    <option value="Trebuchet">Trebuchet</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="WireOn">Wire On</option>
+                </select>
+            </div>
+            
+            <!--<div class="control-group">
+            	<label class="field-icon-Emerland custom-icon-textSize" for="inputTamanioFuente"></label>
+                <select id="inputTamanioFuente">
+                	<option value="1"><span id="lblMuyPequenio">Muy pequeño</span></option>
+                    <option value="2"><span id="lblPequenio">Pequeño</span></option>
+                    <option value="3" selected><span id="lblNormal">Normal</span></option>
+                    <option value="4"><span id="lblMediano">Mediano</span></option>
+                    <option value="5"><span id="lblGrande">Grande</span></option>
+                    <option value="6"><span id="lblMuyGrande">Muy grande</span></option>
+                </select>
+            </div>-->
+            
+            <div class="control-group">
+            	<a href="javascript:;" data-role="none" id="btnImagenTarjetaGaleria" class="boton-Aplicar">
+	            	<div class="panelGaleria">	                	
+                    	<div class="fade in" id="pnlMostrarTextoFotoGaleria">
+                        	<p id="lblFotoGaleria">Pulse para añadir una foto de su galería ...</p>
+                        </div>
+                        <div class="fade imagenFormulario" id="pnlMostrarImagenGaleria">
+                        	<img id="imgPrincipalTarjetaGaleria"/>
+                        </div>	                    
+                	</div>
+                </a>
+                <a href="javascript:;" data-role="none" id="btnImagenTarjetaCamara" class="boton-Aplicar">
+	                <div class="panelCamara">	                	
+                    	<div class="fade  in" id="pnlMostrarTextoFotoCamara">
+	                    	<p id="lblFotoCamara">... o aquí para obtener una foto desde la cámara</p>
+                        </div>
+                        <div class="fade imagenFormulario" id="pnlMostrarImagenCamara">
+                        	<img id="imgPrincipalTarjetaCamara"/>
+                        </div>	                    
+	                </div>
+	             </a>
+            </div>
+            
+            <div class="control-group">
+            	<a href="javascript:;" data-role="none" id="btnImagenFondoTarjeta" class="boton-Aplicar">
+	            	<div class="panelFondo">                	
+	                	<div class="fade in" id="pnlMostrarTextoFondo">
+	                    	<p id="lblMostrarTextoFondo">Pulse aquí para seleccionar el fondo asociado al Bubble.</p>
+	                    </div>
+	                    <div class="fade imagenFormulario" id="pnlMostrarImagenFondo">
+	                    	<img id="imgFondoTarjeta" />
+	                    </div>                    
+	                </div>
+                </a>
+            </div>
+            
+            <div class="control-group">
+            	<a href="javascript:;" data-role="none" id="btnObtenerSonido" class="boton-Aplicar">
+	            	<div class="panelSonido">	                	
+                    	<div class="fade in" id="pnlMostrarTextoSonido">
+                        	<p id="lblMostrarTextoSonido">Pulse aquí para grabar un sonido asociado al nuevo Bubble.</p>
+                        </div>
+                        <div class="fade imagenFormulario" id="pnlGrabacionSonido">
+                        	<p style="text-align:center"><img id="imgGrabacionSonido" src="img/sound_add.png"/></p>
+                        </div>	                    
+	                </div>
+                </a>
+            </div>
+            <div class="control-group">
+                <a href="javascript:;" id="btnCrearBubble" class="boton-Verde">Aceptar<!--<i class="icon-plus"></i>--></a>
+            </div>
+            <div class="control-group">
+                <a href="javascript:;" id="btnCancelarBubble" class="boton-Rojo">Cancelar<!--<i class="icon-plus"></i>--></a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página ELEGIR FONDO -->
+    <div id="PaginaElegirFondo" data-role="page" data-theme="a">
+    	<div data-role="header" data-position="fixed">
+        	<!--<a href="javascript:;" data-role="button" data-icon="back" data-theme="b" onTouchStart="Volver(event)">Atrás</a>-->
+        	<a href="javascript:;" onTouchStart="Volver(event);tarjetaEnEdicion=false" data-theme="b"><i class="icon-chevron-left"></i><i class="icon-home"></i></a> 
+
+            <h1 id="lblTituloElegirFondo">Seleccionar fondo</h1>
+        </div>        
+        <div data-role="content">
+        	<!--<ul data-role="listview" data-theme="f" id="lstFondosParaTarjeta" data-inset="true">
+         	</ul>-->
+	         <div id="lstFondosParaTarjeta">
+	         </div>
+        </div>
+    </div>
+    
+    <!-- Página CONFIRMAR ELIMINAR TARJETA -->
+    <div id="PaginaConfirmarEliminaTarjeta" data-role="page">
+    	<div data-role="header" data-theme="b">
+        	<h1 id="lblTituloEliminaTarjeta">Elimina tarjeta</h1>
+        </div>
+        <div data-role="content">
+        	<p id="lblConfirmarEliminaTarjeta">¿Desea eliminar la tarjeta seleccionada?</p>
+            <a href="javascript:;" onTouchStart="EliminaTarjetaActual(event)" onClick="EliminaTarjetaActual(event)" data-role="button">
+            	<span id="ConfirmarEliminarTarjetaSi">Sí</span>
+            </a>
+            <a href="javascript:;" onTouchStart="Volver(event)"  data-role="button" data-rel="back">
+            	<span id="ConfirmarEliminarTarjetaNo">No</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Página de AJUSTES -->
+    <div id="PaginaAjustes" data-role="page" data-theme="c">
+    	<div data-role="header">
+        	<!--<a href="javascript:;" data-role="button" data-icon="back" data-theme="b" onTouchStart="Volver(event)">Atrás</a>-->
+        	<a href="javascript:;" onTouchStart="Volver(event);tarjetaEnEdicion=false" data-theme="b"><i class="icon-chevron-left"></i><i class="icon-home"></i></a> 
+
+        	<h1 id="lblTituloAjustes">Ajustes</h1>
+        </div>
+        <div data-role="content" data-theme="a">  
+            <div class="control-group">
+            	<h4 id="tituloIdiomaPrincipal">Idioma principal</h4>   
+            	<label class="field-Carrot" for="lstIdiomaPrincipal"></label>
+                <select id="lstIdiomaPrincipal">
+                	<option value="es">Español</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <div class="control-group">
+            	<h4 id="tituloIdiomaSecundario">Idioma secundario</h4>
+            	<label class="field-Carrot" for="lstIdiomaSecundario"></label>
+                <select id="lstIdiomaSecundario">
+                	<option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="it">Italiano</option>
+                </select>
+            </div>
+            <div class="control-group">
+            	<p id="lblExplicacionEliminarTodo">Pulse en este botón si quiere eliminar todas las categorías y todas las bubbles que tiene actualmente.</p>
+            	<a href="javascript:;" id="btnEliminarTodo" class="boton-Rojo">ELIMINAR TODO</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página Tutorial 1 -->
+    <div id="PaginaTutorial1" data-role="page" data-theme="a">
+    	<div data-role="header" data-position="fixed">
+    		<a href="#PaginaInicial" data-role="button" data-theme="b"><i class="icon-chevron-left"></i><i class="icon-home"></i></a>
+        	<h1>Tutorial</h1>
+        </div>
+        <div id="PaginaTutorial1_content" data-role="content" data-theme="a">
+        	<div id="textoTutorial1" class="ContenidoTutorial">
+            	<h1>Bienvenido</h1>
+            	<h2>¿Estás listo?</h2>
+	     	</div>
+            <div class="imagenTutorial">
+            	<img src="img/tutorial/FondoTutorial1.png"/>                
+        	</div>
+            <div class="BotonesTutorial">    
+            	<a href="#"><img src="img/tutorial/btnTutorialAtras_1024.png" class="desactivado" /></a>        	
+                <a href="#"><img src="img/tutorial/btnPuntoNegroTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial3"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial4"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial5"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial6"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="#PaginaTutorial3"><img src="img/tutorial/btnTutorialDelante_1024.png" /></a>
+            </div>
+        </div>
+    </div>
+     
+     <!-- Página Tutorial 3 -->
+     <div id="PaginaTutorial3" data-role="page" data-theme="a">
+     	<div data-role="header" data-position="fixed">
+        	<a href="#PaginaInicial" data-role="button" data-theme="b"><i class="icon-chevron-left"></i><i class="icon-home"></i></a>
+            <h1>Tutorial</h1>
+        </div>
+        <div id="PaginaTutorial3_content" data-role="content" data-theme="a">
+        	<div class="ContenidoTutorial">
+            	<p id="textoTutorial3" >Bubble Words utiliza la asociación de objetos. Una gran variedad de imágenes, texturas, colores y sonidos para reforzar el recuerdo 
+                de conceptos abstractos del idioma.</p>
+            </div>
+            <div class="imagenTutorial">
+            	<img src="img/tutorial/FondoTutorial3.png"/>                
+        	</div>
+            <div class="BotonesTutorial">    
+                <a href="index.html#PaginaTutorial1"><img src="img/tutorial/btnTutorialAtras_1024.png"/></a>            
+                <a href="index.html#PaginaTutorial1"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial3"><img src="img/tutorial/btnPuntoNegroTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial4"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial5"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial6"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="#PaginaTutorial4"><img src="img/tutorial/btnTutorialDelante_1024.png" /></a>
+            </div>
+            <!--
+           <div class="BotonesTutorial">
+                <a href="javascript:;" onTouchStart="Volver(event)" data-transition="slide"><img src="img/transparente.png" class="atras" /></a>
+                <a href="index.html#PaginaTutorial1" data-transition="slide" ><img src="img/transparente.png" class="puntoBlanco" /></a>
+                <a href="#"><img src="img/transparente.png" class="puntoNegro" /></a>
+                <a href="index.html#PaginaTutorial4" data-transition="slide" ><img src="img/transparente.png" class="puntoBlanco" /></a>
+                <a href="index.html#PaginaTutorial5" data-transition="slide" ><img src="img/transparente.png" class="puntoBlanco" /></a>
+                <a href="index.html#PaginaTutorial6;" data-transition="slide" ><img src="img/transparente.png" class="puntoBlanco" /></a>
+                <a href="#PaginaTutorial4" data-transition="slide"><img src="img/transparente.png" class="delante" /></a>
+            </div>
+            -->        
+        </div>
+     </div>
+     
+     <!-- Página Tutorial 4 -->
+     <div id="PaginaTutorial4" data-role="page" data-theme="a">
+     	<div data-role="header" data-position="fixed">
+        	<a href="#PaginaInicial" data-role="button" data-theme="b"><i class="icon-chevron-left"></i><i class="icon-home"></i></a>
+            <h1>Tutorial</h1>
+        </div>
+        <div id="PaginaTutorial4_content" data-role="content" data-theme="a">
+        	<div class="ContenidoTutorial">
+            	<p id="textoTutorial4">Buble Words permite que el proceso de creación de la tarjeta recordatorio (bubble), sea totalmente personalizado, aportando así, una mayor 					fuerza memorística.</p>
+            </div>
+            <div class="imagenTutorial">
+            	<img src="img/tutorial/FondoTutorial4.png"/>                
+        	</div>
+            <div class="BotonesTutorial">    
+                <a href="index.html#PaginaTutorial3"><img src="img/tutorial/btnTutorialAtras_1024.png" /></a>            
+                <a href="index.html#PaginaTutorial1"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial3"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial4"><img src="img/tutorial/btnPuntoNegroTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial5"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial6"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="#PaginaTutorial5"><img src="img/tutorial/btnTutorialDelante_1024.png" /></a>
+            </div>
+        </div>
+     </div>
+     
+     <!-- Página Tutorial 5 -->
+     <div id="PaginaTutorial5" data-role="page" data-theme="a">
+     	<div data-role="header" data-position="fixed">
+        	<a href="#PaginaInicial" data-role="button" data-theme="b"><i class="icon-chevron-left"></i><i class="icon-home"></i></a>
+            <h1>Tutorial</h1>
+        </div>
+        <div id="PaginaTutorial5_content" data-role="content" data-theme="a">
+        	<div class="ContenidoTutorial">
+            	<p id="textoTutorial5">Buble Words nos da la oportunidad de crear a medida nuestros propios diccionarios de usuarios en cada especialidad, campo o tecnología y de
+implementarlos con el tiempo.</p>
+            </div>
+            <div class="imagenTutorial">
+            	<img src="img/tutorial/FondoTutorial5.png"/>                
+        	</div>
+           <div class="BotonesTutorial">    
+                <a href="index.html#PaginaTutorial4"><img src="img/tutorial/btnTutorialAtras_1024.png" /></a>            
+                <a href="index.html#PaginaTutorial1"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial3"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial4"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial5"><img src="img/tutorial/btnPuntoNegroTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial6"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="#PaginaTutorial6"><img src="img/tutorial/btnTutorialDelante_1024.png" /></a>
+            </div>
+        </div>
+     </div>
+     
+     <!-- Página Tutorial 6 -->
+     <div id="PaginaTutorial6" data-role="page" data-theme="a">
+     	<div data-role="header" data-position="fixed">
+        	<a href="#PaginaInicial" data-role="button" data-theme="b"><i class="icon-chevron-left"></i><i class="icon-home"></i></a>
+            <h1>Tutorial</h1>
+        </div>
+        <div id="PaginaTutorial6_content" data-role="content" data-theme="a">
+        	<div class="ContenidoTutorial">
+            	<p id="textoTutorial6" >Buble Words está pensado para trabajar de una manera rápida y sobre el terreno, sacándole partido a las labores de nuestra vida cotidiana: trabajo, turismo o universidad.</p>
+            </div>
+            <div class="imagenTutorial">
+            	<img src="img/tutorial/FondoTutorial6.png"/>                
+        	</div>
+           <div class="BotonesTutorial">    
+                <a href="index.html#PaginaTutorial5"><img src="img/tutorial/btnTutorialAtras_1024.png" /></a>            
+                <a href="index.html#PaginaTutorial1"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial3"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial4"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial5"><img src="img/tutorial/btnPuntoTutorial_1024.png"/></a>
+                <a href="index.html#PaginaTutorial6"><img src="img/tutorial/btnPuntoNegroTutorial_1024.png"/></a>
+                <a href="#"><img src="img/tutorial/btnTutorialDelante_1024.png" class="desactivado" /></a>
+            </div>
+        </div>
+     </div>       
+ 	</div>
+       
+
+    <!--
+    Para Local importar cordova
+    Para Phonegap importar phonegap.js  
+    -->
+    <!--<script src="phonegap.js" type="text/javascript"></script>-->
+	<script src="js/cordova-2.3.0.js" type="text/javascript"></script>
+    <script src="js/jquery-1.7.1.js" type="text/javascript"></script>
+    <script src="js/jquery.mobile-1.2.1.js" type="text/javascript"></script>
+    <script src="js/jquery.textfill.min.js" type="text/javascript"></script>
+    
+    
+    <script type="text/javascript" src="js/categorias.js"></script>
+    <script type="text/javascript" src="js/tarjetas.js"></script>
+    <script type="text/javascript" src="js/paginas.js"></script>
+    <script type="text/javascript" src="js/database.js"></script>
+    <script type="text/javascript" src="js/sonido.js"></script>
+    
+    <script type="text/javascript" src="js/jquery.localisation.min.js"></script>
+    <script type="text/javascript" src="js/idiomas-es.js"></script>
+    <script type="text/javascript" src="js/idiomas-en.js"></script>
+    <script type="text/javascript" src="js/idiomas.js"></script>
+    
+    <script src="cdv-plugin-fb-connect.js"></script>
+ 	<script src="facebook-js-sdk.js"></script>
+ 	
+	<script src="js/_config.js"></script>
+	<script src="js/ui.js"></script>
+	<script src="js/auth.js"></script>
+	<script src="js/feed.js"></script>
+	<script src="js/graph_api.js"></script>
+	<script src="js/requests.js"></script>
+	<!--<script src="js/credits.js"></script>-->
+ 	
+    <script type="text/javascript">		
+		
+		document.addEventListener('deviceready', onDeviceReady, false);
+		        
+        function onDeviceReady(event){		
+            $(document).ready(function(e) {               
+                inicializar();               
+            });
+        }
+    </script>
+    </body>
+</html>
