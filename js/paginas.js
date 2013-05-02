@@ -27,26 +27,8 @@ function inicializar(){
 	InicializarIdiomas();
 	comprobarTablas();	
 	
-	// Initialize the Facebook SDK	  
-	FB.init({
-		appId: '471428772926328',
-		nativeInterface: CDV.FB,
-		useCachedDialogs: false
-	});
-	FB.getLoginStatus(handleStatusChange);
-	authUser();
-	updateAuthElements();
-
-
-	// Detección del dispositivo
-	document.addEventListener("backbutton",onBackButton,false);
-	DetectarDimensiones();
 	
-	getAccesToken();
-  	// Get a new one every 9 minutes.
-  	setInterval(getAccesToken, 9 * 60 * 1000);
-  	
-  		//Aplicamos estilos mediante jquery
+	//Aplicamos estilos mediante jquery
 	$('div.ContenidoTutorial > p').addClass("letraMediana");
 	//ocultamos los divs de imagenes del formulario de nuevo bubble
 	$('div.imagenFormulario').hide();
@@ -103,9 +85,27 @@ function inicializar(){
 	$('#PaginaReversoTarjeta').on('pageshow',function(){  	
 		//update($(this).find('.jtextfill span'));
 		$('.jtextfillReverso').textfill({maxFontPixels: 200});		  
-	});	
+	});
+	
+	// Detección del dispositivo
+	document.addEventListener("backbutton",onBackButton,false);
+	DetectarDimensiones();
+	
+	getAccesToken();
+  	// Get a new one every 9 minutes.
+  	setInterval(getAccesToken, 9 * 60 * 1000);
   	
-  	navigator.splashscreen.hide();
+  		// Initialize the Facebook SDK	  
+	FB.init({
+		appId: '471428772926328',
+		nativeInterface: CDV.FB,
+		useCachedDialogs: false
+	});
+	FB.getLoginStatus(handleStatusChange);
+	authUser();
+	updateAuthElements();
+	
+	navigator.splashscreen.hide();
 }
 /*
  * Este método controla la pulsación del botón atrás en los dispositivos que lo tengan disponible
