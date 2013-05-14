@@ -165,19 +165,22 @@ function ObtenerIdiomas(){
 function ConsultarIdiomas(tx,results){  
 	//navigator.notification.alert("Entramos en ConsultarIdiomas, obtenemos "+results.rows.length+" tuplas")  
     if (results.rows.length == 0){       
-        console.error("No existe informacion de idiomas, El idioma del sistema es: "+idiomaSistema)
+        //console.error("No existe informacion de idiomas, El idioma del sistema es: "+idiomaSistema)
         if(idiomaSistema != "es"){
-        	console.warn("##############3 El idioma del telefono es: Distinto de Español")
+        	//console.warn("##############3 El idioma del telefono es: Distinto de Español")
             principal = "en";
             secundario = "es";
         }else{
-        	console.warn("##############3 El idioma del telefono es: Español")
+        	//console.warn("##############3 El idioma del telefono es: Español")
         	principal = "es";
             secundario = "en";
         }
         //console.error("No existia informacion de idiomas, establecemos los idiomas por defecto: Principal: "+principal+" Secundario: "+secundario);
         //console.error("insertamos los idiomas por defecto");        
-        tx.executeSql("INSERT INTO LangData(principal,secundario) VALUES('"+principal+"','"+secundario+"')");
+        bwBD.transaction(function(tx){
+        	 tx.executeSql("INSERT INTO LangData(principal,secundario) VALUES('"+principal+"','"+secundario+"')");
+        },function(e){console.error("Error al insertar los idiomas, "+e);},ComprobacionCorrecta)
+       
         //navigator.notification.alert("insertamos registro por defecto de idioma");           
         //console.error("insertamos registros en langdata");
         idiomaPrincipal=principal;
@@ -221,7 +224,8 @@ function CambiarIdiomas(principal,secundario){
         try{
         	//navigator.notification.alert("actualizar idiomas,recibimos parametros, principal: "+principal+" secundario: "+secundario);
         	//console.error("Procedemos a actualizar los idiomas,recibimos los siguientes parametros, principal: "+principal+" secundario: "+secundario);
-            tx.executeSql("UPDATE LangData SET principal ='"+principal+"', secundario = '"+secundario+"'");
+            tx.executeSql("DELETE FROM LangData WHERE 1");
+            tx.executeSql("INSERT INTO LangData(principal,secundario) VALUES('"+principal+"','"+secundario+"')");
             
             idiomaPrincipal=principal;
             idiomaSecundario=secundario;
