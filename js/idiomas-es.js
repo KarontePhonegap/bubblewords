@@ -4,7 +4,9 @@ res_Idioma = 'es';
 // Generales
 res_Si = 'Sí';
 res_No = 'No';
-res_Cancelar = 'CANCELAR';
+res_Cancelar = 'Cancelar';
+res_Aceptar = "Ok";
+
 
 // Página inicial
 res_Inicio = 'INICIO';
@@ -103,5 +105,24 @@ res_TextoTutorial4="Buble Words permite que el proceso de creación de la tarjet
 res_TextoTutorial5="Buble Words nos da la oportunidad de crear a medida nuestros propios diccionarios de usuarios en cada especialidad, campo o tecnología y de implementarlos con el tiempo.";
 res_TextoTutorial6="Buble Words está pensado para trabajar de una manera rápida y sobre el terreno, sacándole partido a las labores de nuestra vida cotidiana: trabajo, turismo o universidad.";
 
+//Compartir en FaceBook
+res_Compartir_Subtitulo="Estoy usando BubbleWords Talk en mi smartphone para mejorar mis idiomas!";
+res_Compartir="Quiero compartir este bubble: ";
+res_Descargar="¡Descargar ahora!;"
+
+//Mensajes guia inicial:
+res_guia_1='Para comenzar crea una categoría, la cual contendrá los bubbles que vayamos creando.';
+res_guia_1_titulo="Creando nuestra primera categoría";
+res_guia_2="Introduce un nombre para la categoría y una descripción(opcional)";
+res_guia_2_titulo="Creando nuestra primera categoría";
+res_guia_3="Ahora creamos nuestro primer bubble, recuerda que es imprescindible rellenar el nombre y la traducción, además podrás añadir imágenes, grabaciones, fondos, etc. para que personalices tus bubble de forma única";
+res_guia_3_titulo="Creando nuestro primer bubble";
+res_tutorial_tarjetas="Puede navegar entre los Bubbles de la categoría, deslizando el dedo hacia los lados";
+
+
 //Otros
-res_servidor_no_disponible="El servidor de traducción no esta disponible.";
+res_servidor_no_disponible="El servidor de traducción no esta disponible. La traducción automática no funcionará.";
+res_titulo_servidor_no_disponible="Traducción no disponible";
+res_conexion_no_disponible="No hay conexion de red, el servicio de traducción no estará disponible.";
+res_titulo_conexion="No hay conexión";
+

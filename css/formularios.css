@@ -39,8 +39,10 @@ div.ui-select div.ui-btn-up-a{border:0 !important;text-shadow:none !important;}
 .tooltip{display:block;margin-top:32px !important;opacity:0;padding:5px;position:absolute;visibility:visible;z-index:1030;}.tooltip.bottom{margin-top:3px;padding-top:8px;}
 .tooltip.in{opacity:1;}
 .tooltip-arrow{border-style:solid;height:0;position:absolute;width:0;border-bottom-color:#da533a;border-width:0 9px 9px;left:50%;margin-left:-9px;top:-1px;}
-.tooltip-inner{background-color:#da533a;border-radius:6px 6px 6px 6px;color:#FFFFFF;max-width:200px;text-decoration:none;line-height:18px;padding:12px;text-align:center;width:183px;}
+.tooltip-inner{background-color:#da533a;border-radius:6px 6px 6px 6px;color:#FFFFFF;text-decoration:none;padding:12px;text-align:center;height:80px;}
 #lstFondosParaTarjeta img{width:100%;border-radius:30px;}#lstFondosParaTarjeta img:active{opacity:0.7;}
 #imgGrabacionSonido{width:40% !important;}
 #imgFondoTarjeta{border-radius:30px;}
 #PaginaElegirFondo div.ui-content{background-color:white;}
+#pnlResultadoTraduccion{width:90%;max-height:80px;z-index:-200;}
+#lblTraduccionObtenida{position:relative;top:30%;}

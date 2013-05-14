@@ -1,10 +1,33 @@
+var objIdiomas= new Object();
+objIdiomas.es = ['Español','Spanish'];
+objIdiomas.en =['Inglés','English'];
+objIdiomas.it=['Italiano','Italian'];
+objIdiomas.fr=['Francés','French'];
+objIdiomas.de=['Alemán','German'];
 // JavaScript Document
 
 /**
  * InicializarIdiomas. Realiza la inicialización del entorno para el tratamiento de los idiomas
  */
 function InicializarIdiomas(){
-	comprobarIdioma();
+	//comprobarIdioma();
+    console.error("Entramos en inicializar idiomas");
+    console.log("Cargamos idiomas: "+idiomaPrincipal);
+    
+    $.localise('js/idiomas', {language: idiomaPrincipal, loadBase: true});
+    
+    $('#lstIdiomaPrincipal option[value='+idiomaPrincipal+']').attr('selected', 'selected');
+    //$('#lstIdiomaPrincipal').selectmenu('refresh');
+    CargarEtiquetas();
+    $('#lstIdiomaSecundario option[value='+idiomaSecundario+']').attr('selected', 'selected');
+   // $('#lstIdiomaSecundario').selectmenu('refresh');
+    //Comporbamos la conexion después de haber obtenido los recursos de idioma para que el mensaje aparezca en el 
+    //idioma correcto
+    
+    checkConnection();
+
+    
+	
 }
 
 /**
@@ -15,8 +38,7 @@ function comprobarIdioma(){
 		// Se selecciona el elemento por defecto
 		if (idiomaPrincipal.toString().length > 0) {			
 			//$('#lstIdiomaPrincipal option[value='+idiomaPrincipal+']').attr('selected', 'selected');
-			//$('#lstIdiomaPrincipal').selectmenu('refresh');
-			
+			//$('#lstIdiomaPrincipal').selectmenu('refresh');			
 			
 			// Actualización del idioma actual y cambio de recursos
 			$.localise('js/idiomas', {language: $('#lstIdiomaPrincipal').attr('value'), loadBase: true});

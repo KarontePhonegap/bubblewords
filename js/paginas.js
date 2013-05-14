@@ -3,11 +3,17 @@ var tipoDispositivo = "";
 var existeFoto = false;
 var anchoFoto = 0;
 var altoFoto = 0;
-var tutorialTerminado=true;//poner a false cunado se termine la app
+var mostrarTutorial;
 var accessToken;
 var idiomaPrincipal;
 var idiomaSecundario;
 var idiomaSistema;
+var hayConexion;
+var intervaloNormal, intervaloSinConexion,intervaloComprobarConexion;
+var networkState;
+var liteVersion= true; //Activa o desactiva las limitaciones de la version lite
+var numTraducciones=0;
+var alertMostrado = false;
 function inicializar(){
 	
 	//console.log("Phonegap inicializado");	
@@ -23,11 +29,17 @@ function inicializar(){
 	ObtenerIdiomaSistema();
 	AbrirBDD();
 	ObtenerIdiomas();	
-	//cargarIdiomas();
-	InicializarIdiomas();
+	//cargarIdiomas();	
 	comprobarTablas();	
+	ObtenerAppData();
 	
+	//Declaramos los event handlers para cuando se obtiene o pierde la conexion.
+	document.addEventListener("offline", sinConexion, false);
+	document.addEventListener("online", conConexion, false);
+	
+	navigator.splashscreen.hide();
 	// Initialize the Facebook SDK
+	
 	try{	  
 		FB.init({
 			appId: '471428772926328',
@@ -37,10 +49,13 @@ function inicializar(){
 		FB.getLoginStatus(handleStatusChange);
 		authUser();
 		updateAuthElements();
+		
 	}catch(e){
 		navigator.notification.alert("Error: "+e);
 	}
-		
+	
+	
+	
 	
 	//Aplicamos estilos mediante jquery
 	$('div.ContenidoTutorial > p').addClass("letraMediana");
@@ -49,12 +64,12 @@ function inicializar(){
 	
 	$('#PaginaCategorias').on('pageshow',function(){  	
 		//update($(this).find('.jtextfill span'));
-		 if (listaCategorias.length == 0 && !tutorialTerminado){
+		 if (listaCategorias.length == 0 && mostrarTutorial){
 			navigator.notification.alert(
-		    'Para comenzar crea una categoría',  // message
-		    '',         // callback
-		    'Añadiendo Categorias',            // title
-		    'Ok!'                  // buttonName
+		    res_guia_1,
+		    '',
+		    res_guia_1_titulo,
+		    res_Aceptar
 			);
 		}
 			  
@@ -62,27 +77,27 @@ function inicializar(){
 	
 	$('#PaginaNuevaCategoria').on('pageshow',function(){  	
 		//update($(this).find('.jtextfill span'));
-		 if (listaCategorias.length == 0 && !tutorialTerminado){
+		 if (listaCategorias.length == 0 && mostrarTutorial){
 			navigator.notification.alert(
-		    'Introduce un nombre para la categoría y una descripción(opcional)',  // message
-		    '',         // callback
-		    'Creando Categorias',            // title
-		    'Ok!'                  // buttonName
+		   	res_guia_2,
+		    '',
+		    res_guia_2_titulo,
+		    res_Aceptar
 			);
 		}
 			  
 	});
 	$('#PaginaDetalleCategoria').on('pageshow',function(){  	
 		//update($(this).find('.jtextfill span'));
-		 if (listaCategorias.length == 1 && listaTarjetas.length==0 && !tutorialTerminado){
+		 if (listaCategorias.length > 0 && listaTarjetas.length==0 && mostrarTutorial){
 			navigator.notification.alert(
-		    'Ahora creamos un nuevo bubble',  // message
-		    '',         // callback
-		    'Creando Bubbles',            // title
-		    'Ok!'                  // buttonName
+		    res_guia_3,
+		    '',
+		    res_guia_3_titulo,
+		    res_Aceptar
 			);
-			tutorialTerminado=true;
-		}			  
+			
+		}				  
 	});
 		
 	$('#PaginaDetalleTarjeta').on('pageshow',function(){  	
@@ -94,25 +109,173 @@ function inicializar(){
 		}else{
 			$('#btnTarjetaSonido i').removeClass('desactivado');
 			$('#btnTarjetaSonido').removeClass('btn-desactivado');
+		}		
+		if (listaCategorias.length > 0 && listaTarjetas.length==2 && mostrarTutorial){
+			mostrarTutorial=false;
+			bwBD.transaction(function(tx){
+				console.log("Intentamos insertar registro en appdata");
+				tx.executeSql("INSERT INTO AppData VALUES('FALSE')");
+			},errorBD,ComprobacionCorrecta);
+			
+			$('#TutorialTarjetas p').html(res_tutorial_tarjetas);
+			$('#TutorialTarjetas').fadeIn().css('z-index','200').on('touchstart',function(){
+				$('#TutorialTarjetas').fadeOut();
+			});			
 		}
-	});
-	$('#PaginaReversoTarjeta').on('pageshow',function(){  	
-		//update($(this).find('.jtextfill span'));
-		$('.jtextfillReverso').textfill({maxFontPixels: 200});		  
+		
+		
+	}).on('swipeleft',function(event){
+		for (var i=0;i<tarjetasPorCategoria.length;i++){
+			if (tarjetasPorCategoria[i].id>tarjetaActual.id){
+				console.log("Encontramos la proxima tarjeta");
+				animaBubble(event, $(this),'left',i);					
+				tarjetaActual=tarjetasPorCategoria[i];
+				break;
+			}
+		}		
+	}).on('swiperight',function(event){
+		for (var i=tarjetasPorCategoria.length-1;i>=0;i--){
+			if (tarjetasPorCategoria[i].id<tarjetaActual.id){				
+				animaBubble(event, $(this),'right',i);	
+				tarjetaActual=tarjetasPorCategoria[i];
+				break;
+			}
+		}		
 	});
 	
+	$('#PaginaReversoTarjeta').on('pageshow',function(){  	
+		$('.jtextfillReverso').textfill({maxFontPixels: 200});		  
+	}).on('swipeleft',function(event){
+		for (var i=0;i<tarjetasPorCategoria.length;i++){
+			if (tarjetasPorCategoria[i].id>tarjetaActual.id){
+				console.log("Encontramos la proxima tarjeta");
+				CargarTarjeta(event,tarjetasPorCategoria[i].id,true);
+				break;
+			}
+		}		
+	}).on('swiperight',function(event){
+		for (var i=tarjetasPorCategoria.length-1;i>=0;i--){
+			if (tarjetasPorCategoria[i].id<tarjetaActual.id){				
+				CargarTarjeta(event,tarjetasPorCategoria[i].id,true);
+				break;
+			}
+		}		
+	});
+	
+		
 	// Detección del dispositivo
 	document.addEventListener("backbutton",onBackButton,false);
+	
 	DetectarDimensiones();
+}
+/*
+ * Funcion que realiza la animación a la hora de cambiar de bubble y actualiza la información.
+ * 
+ * @param evento: 	El evento que recibió su funcion anterior 
+ * @param elemento: El elemento al cual se aplicará la animación, 
+ * @param hacia: 	Hacia que lado se transicionará 
+ * @param i:		Id del elemento a cargar
+ */
+function animaBubble(event, elemento, hacia, i){
+	if(hacia ==='left'){
+		elemento.animate({
+		    left:'-'+elemento.css('width').toString()
+		},500,'swing',function(){
+			CargarTarjeta(event,tarjetasPorCategoria[i].id,true);
+			elemento.css('left',elemento.css('width'));		 	
+		 	elemento.animate({left:'0px'},500);
+		});
+	}else if(hacia==='right'){
+		elemento.animate({
+		    left:elemento.css('width').toString()
+		},500,'swing',function(){
+			CargarTarjeta(event,tarjetasPorCategoria[i].id,true);
+			elemento.css('left','-'+elemento.css('width').toString());		 	
+		 	elemento.animate({left:'0px'},500);
+		});
+	}
 	
-	getAccesToken();
-  	// Get a new one every 9 minutes.
-  	setInterval(getAccesToken, 9 * 60 * 1000);
-  	navigator.splashscreen.hide();
-  
+					
+}
+
+
+
+/* YA NO ES NECESARIO
+ * 
+ * Comprueba el estado de la conexión al iniciar la aplicación para notificar si las funciones de traducción
+ * estarán disponibles ,se ejecuta despues de cargar los recursos de idiomas.
+ */
+
+function checkConnection() {
+	networkState = navigator.connection.type;
+	if (networkState == Connection.NONE){    	
+		sinConexion();
+	}else{		
+		conConexion();
+	}	
+}
+
+/*
+function checkConnection() {
+	networkState = navigator.connection.type;
+    
+    var states = {};
+    states[Connection.UNKNOWN]  = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi connection';
+    states[Connection.CELL_2G]  = 'Cell 2G connection';
+    states[Connection.CELL_3G]  = 'Cell 3G connection';
+    states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.NONE]     = 'No network connection';
 	
+	
+     if (networkState == Connection.NONE){    	
+		hayConexion =false;
+		//if(intervaloComprobarConexion==null){
+			//Informamos al usuario de que no hay conexión.
+			navigator.notification.alert(
+			    res_conexion_no_disponible,  // message
+			    '',         // callback
+			    res_titulo_conexion,            // title
+			    res_Aceptar                 // buttonName
+			);
+			//console.log("El intervalo de comprobacion de conexion no existe, lo creamos");
+			//intervaloComprobarConexion= setInterval(checkConnection,30000);//Intervalo de 30 segundos. Modificar segun necesidad
+		//}else{
+			console.log("El intervalo de comprobacion de conexion existe, pero sigue sin haber conexion.");
+		//}
+	}else{
+		//console.log("Conexión reestablecida. Quitamos el intervalo de comprobacion de conexion");
+		//clearInterval(intervaloComprobarConexion);
+		hayConexion =true;
+	}
 	
 }
+*/
+
+
+
+/*
+ * Devuelve un mensaje cuando se pierde la conexión y establece hayConexion a false
+ */
+function sinConexion(){
+	console.log("Sin Conexion");
+	hayConexion =false;
+	navigator.notification.alert(res_conexion_no_disponible, '', res_titulo_conexion, res_Aceptar);
+}
+/*
+ * Solicitamos un token de acceso al reestablecerse la conexión y creamos el intervalo de peticion normal
+ */
+function conConexion(){	
+	hayConexion=true;
+	console.log("Existe o se ha reestablecido la conexion solicitamos el token");
+	clearInterval(intervaloNormal);
+	getAccessToken();	
+	//Obtener un token cada 9 minutos
+	intervaloNormal = setInterval(getAccessToken, 9 * 60 * 1000);
+  	
+}
+
 /*
  * Este método controla la pulsación del botón atrás en los dispositivos que lo tengan disponible
  * y en caso de pulsarse estando en la pagina inicial termina la aplicación
@@ -233,7 +396,8 @@ function LimpiadoFormularioNuevaTarjeta(event){
     $('#pnlMostrarTextoFondo').addClass('in').show();
     
     LimpiarTraduccion(event);
-    $('#inputCategoriaRelacionada').selectmenu( "refresh", true );
+    
+    RepresentarCategorias();
     
     
     // Quitar cualquier foto anterior
@@ -255,17 +419,42 @@ touchMove = function(event) {
 
 /*--- PÁGINA: Inicial ---*/
 $('#lnkNuevaTarjetaPrincipal').on('touchStart click', function(event){
-	// Se comprueba si hay alguna categoria
-	LimpiadoFormularioNuevaTarjeta(event);
-    //console.log("Nº de categorías: " + listaCategorias.length);
-    if ((listaCategorias.length == 0) && (activarPhoneGap)) {
-        navigator.notification.alert(res_SinCategoria);
-    }
-    else {
-        // Activa la selección de categoría    
-        ActivarSeleccionCategorias();
-        $.mobile.changePage($('#PaginaNuevaTarjeta'));
-    }
+	
+	var maxId = 0;
+	$.each(listaTarjetas, function(i, item){
+		if (item.id > maxId) {
+			maxId = item.id;
+		}
+	});
+	if ((!liteVersion)||(liteVersion && maxId < 5)){
+		// Se comprueba si hay alguna categoria
+		LimpiadoFormularioNuevaTarjeta(event);
+	    //console.log("Nº de categorías: " + listaCategorias.length);
+	    if (listaCategorias.length == 0) {
+	        navigator.notification.alert(res_SinCategoria);
+	    }
+	    else {
+	        // Activa la selección de categoría    
+	        ActivarSeleccionCategorias();
+	        $.mobile.changePage($('#PaginaNuevaTarjeta'));
+	    }		
+	}else if(maxId >0){
+		navigator.notification.confirm('Recuerde que la versión lite sólo le permite crear 5 Bubbles.\nSi desea crear mas puede comprar la versión completa ahora.',
+		function(buttonIndex){
+			if (buttonIndex == 1){
+				switch(device.platform.toUpperCase()){
+					case "ANDROID":
+						window.open("https://play.google.com/store/apps/details?id=es.karonte.BubbleWordsTalkPro", '_system');					
+						break;				
+					case "IOS":
+						window.open("https://itunes.apple.com/es/app/id641448326?mt=8", '_system');
+						break;				
+				}
+			}
+		},
+		'Actualize a Bubble Words Pro',
+		'Comprar,Más Tarde');
+	}	
 });
 
 /*--- PÁGINA: PaginaCategorias ---*/
@@ -275,9 +464,38 @@ $('#btnEditarCategorias').on('touchStart click', function(event){
 	PararEvento(event);
 });
 
+
+$('#btnAnadirCategoria').on('touchStart click', function(event){	
+	var maxId = 0;
+	$.each(listaCategorias, function(i, item){
+		if (item.id > maxId) {
+			maxId = item.id;
+		}
+	});
+	if ((!liteVersion)||(liteVersion && maxId < 1)){
+		$.mobile.changePage($('#PaginaNuevaCategoria'));
+	}else if(maxId >0){
+		navigator.notification.confirm('Recuerde que la versión lite sólo le permite crear 1 categoría.\nSi desea crear mas puede comprar la versión completa ahora.',
+		function(buttonIndex){
+			if (buttonIndex == 1){
+				switch(device.platform.toUpperCase()){
+					case "ANDROID":
+						window.open("https://play.google.com/store/apps/details?id=es.karonte.BubbleWordsTalkPro", '_system');					
+						break;				
+					case "IOS":
+						window.open("https://itunes.apple.com/es/app/id641448326?mt=8", '_system');
+						break;				
+				}
+			}
+		},
+		'Actualize a Bubble Words Pro',
+		'Comprar,Más Tarde');
+	}
+});
+
 /* PÁGINA: PaginaNuevaCategoría */
 $('#btnInsertarCategoria').on('touchStart click', function(event){	
-	if (TieneCaracteres('#inputNombreCategoria')) {	
+	if (TieneCaracteres('#inputNombreCategoria')) {
 		var nombre = $('#inputNombreCategoria').val();
 		var descripcion= $('#inputDescripcionCategoria').val()
 		$('#PaginaNuevaCategoria').find(':input').val("");
@@ -290,19 +508,42 @@ $('#btnInsertarCategoria').on('touchStart click', function(event){
 
 /*--- PÁGINA: PaginaDetalleCategoria ---*/
 $('#lnkNuevaTarjeta').on('touchStart click', function(event){
-	// Ocultar la selección de categoría
-	DesactivarSeleccionCategorias();
 	
-	LimpiadoFormularioNuevaTarjeta(event);
-	
-	$.mobile.changePage($('#PaginaNuevaTarjeta'));	
+	var maxId = 0;
+	$.each(listaTarjetas, function(i, item){
+		if (item.id > maxId) {
+			maxId = item.id;
+		}
+	});
+	if ((!liteVersion)||(liteVersion && maxId < 5)){
+		// Ocultar la selección de categoría
+		DesactivarSeleccionCategorias();		
+		LimpiadoFormularioNuevaTarjeta(event);		
+		$.mobile.changePage($('#PaginaNuevaTarjeta'));			
+	}else if(maxId >0){
+		navigator.notification.confirm('Recuerde que la versión lite sólo le permite crear 5 Bubbles.\nSi desea crear mas puede comprar la versión completa ahora.',
+		function(buttonIndex){
+			if (buttonIndex == 1){
+				switch(device.platform.toUpperCase()){
+					case "ANDROID":
+						window.open("https://play.google.com/store/apps/details?id=es.karonte.BubbleWordsTalkPro", '_system');					
+						break;				
+					case "IOS":
+						window.open("https://itunes.apple.com/es/app/id641448326?mt=8", '_system');
+						break;				
+				}
+			}
+		},
+		'Actualize a Bubble Words Pro',
+		'Comprar,Más Tarde');
+	}
 });
 
 /*--- PÁGINA: PaginaNuevaTarjeta ---*/
-$('#btnAplicarTraduccion').on('touchStart click', function(event){
+$('#pnlResultadoTraduccion').on('touchStart click', function(event){
 	//navigator.notification.alert("Hemos obtenido la traduccion: "+traduccionSugerida)
-	$('#inputTitulo2Tarjeta').attr('value', traduccionSugerida);
-	LimpiarTraduccion();
+	AplicarTraduccion(event);
+	
 	PararEvento(event);
 });
 
@@ -331,7 +572,8 @@ $('#btnImagenTarjetaGaleria').on('touchStart click', function(event){		// Obtien
 
 $('#btnImagenTarjetaCamara').on('touchStart click', function(event){	// Obtiene la foto de la tarjeta desde la cámara directamente
 	//console.log("Llego a btnImagenTarjetaCamara");
-    if(device.platform.toUpperCase()=="ANDROID"){
+	/*
+    if(device.platform.toUpperCase()=="NADA"){
         navigator.camera.getPicture(function(imageData){        
             var directorioInicial;
             var directorioBubbleWords;
@@ -397,7 +639,9 @@ $('#btnImagenTarjetaCamara').on('touchStart click', function(event){	// Obtiene 
             correctOrientation: true
         });
     }else{
+    	
         console.log("Sacamos la foto desde IOS");
+        */
         navigator.camera.getPicture(function(imageURI) {
             $("#imgPrincipalTarjetaCamara").attr("src", imageURI).on('load', function(){
                 MostrarImagenDeCamara(imageURI, tipoDispositivo);
@@ -411,9 +655,9 @@ $('#btnImagenTarjetaCamara').on('touchStart click', function(event){	// Obtiene 
             targetWidth:2000,
             targetHeight:1000,
             correctOrientation: true,
-            saveToPhotoAlbum: true
+            saveToPhotoAlbum: false
         });   
-    }
+    //}
 	PararEvento(event);
 });
 
@@ -549,7 +793,7 @@ $('#btnCrearBubble').on('touchStart click', function(event){
             NuevaTarjeta(cat, nombreBubble, traduccionBubble, fondo, foto, sonido, anchoFoto, altoFoto, fuente);	
             
            
-            Volver(event);
+            $.mobile.changePage($('#PaginaDetalleCategoria'));
         
             // Se vuelven a establecer los valores por defecto de estos campos
             LimpiadoFormularioNuevaTarjeta(event);
@@ -644,7 +888,7 @@ $('#btnCambiarTarjetaFavorita').on('touchStart click', function(event){
 		$('#btnCambiarTarjetaFavorita').removeClass("ui-btn-favorito");
 		//console.log("Tarjeta cambiada a no favorita");
 	}
-	ActualizarTarjeta(tarjetaActual);
+	ActualizarTarjeta(event,tarjetaActual);
 	PararEvento(event);
 });
 
@@ -660,12 +904,14 @@ $('#lstIdiomaSecundario').on('change', function(event){
 	CambiarIdiomas($('#lstIdiomaPrincipal').attr('value'),$('#lstIdiomaSecundario').attr('value'));
 });
 $('#btnEliminarTodo').on('touchEvent click', function(event){
+	/* TODO
 	navigator.notification.confirm(
 		res_DescripcionEliminarTodo, 	// Mensaje
 		ComprobarEliminarTodo,			// Función	
 		res_EliminarInformacion	,		// Título
 		'Ok, Cancel');
-	
+	*/
+	EliminarTodo();	
 	PararEvento(event);
 });
 
@@ -703,3 +949,4 @@ $('#PaginaTutorial5').on('swipeleft', function(event){
 $('#PaginaTutorial6').on('swiperight', function(event){
 	Volver(event);
 });
+

@@ -12,7 +12,7 @@ var anchoiPhone3 = 80;
 var anchoiPhone4 = 160;
 var anchoTablet = 230;
 
-
+/*
 var fondosTarjeta = [{'id':1, 'nombre':'fondo 1', 'imagen': 'img/texturas/textura1.jpg', 'iPhone3': 'img/texturas/muestras/textura1_320.jpg', 'iPhone4': 'img/texturas/muestras/textura1_640.jpg', 'tablet': 'img/texturas/muestras/textura1.jpg'},
 {'id':2, 'nombre':'fondo 2', 'imagen': 'img/texturas/textura2.jpg', 'iPhone3': 'img/texturas/muestras/textura2_320.jpg', 'iPhone4': 'img/texturas/muestras/textura2_640.jpg', 'tablet': 'img/texturas/muestras/textura2.jpg'},
 {'id':3, 'nombre':'fondo 3', 'imagen': 'img/texturas/textura3.jpg', 'iPhone3': 'img/texturas/muestras/textura3_320.jpg', 'iPhone4': 'img/texturas/muestras/textura3_640.jpg', 'tablet': 'img/texturas/muestras/textura3.jpg'},
@@ -29,9 +29,11 @@ var fondosTarjeta = [{'id':1, 'nombre':'fondo 1', 'imagen': 'img/texturas/textur
 {'id':14, 'nombre':'fondo 14', 'imagen': 'img/texturas/textura14.jpg', 'iPhone3': 'img/texturas/muestras/textura14_320.jpg', 'iPhone4': 'img/texturas/muestras/textura14_640.jpg', 'tablet': 'img/texturas/muestras/textura14.jpg'},
 {'id':15, 'nombre':'fondo 15', 'imagen': 'img/texturas/textura15.jpg', 'iPhone3': 'img/texturas/muestras/textura15_320.jpg', 'iPhone4': 'img/texturas/muestras/textura15_640.jpg', 'tablet': 'img/texturas/muestras/textura15.jpg'}];
 
+
 var tarjetasModificadas = new Array();
 tarjetasModificadas[1]  = new Array();
 tarjetasModificadas[2]  = new Array();
+*/
 
 /*--- MÉTODOS ---*/
 
@@ -68,13 +70,14 @@ function RepresentarListaTarjetas(categoria, favoritas){
 	else {
 		ancho = anchoTablet;
 	}
-	
+	/*
 	// Inclusión de las tarjetas, en la lista correspondiente
-	$.each(listaTarjetas, function(i, item) {
+	$.each(listaTarjetas, function(i, item) {		
+		console.log("Comprobamos esta tarjeta para añadirla a la categoría ("+categoria.id+"): "+item.id+" con la categoria: "+item.categoria);
 		if (  ( (favoritas) && (item.favorita == 1) ) || ( (!favoritas) && (item.categoria == categoria.id) ) ) {
 			
 			// Maquetación de la tabla que llevará cada una de las imágenes relacionadas con la tarjeta
-			texto += "<div class=\'ui-block-" + letra + "\'><a href=\'javascript:;\' onClick=\'CargarTarjeta(event," + 
+			texto += "<div><a href=\'javascript:;\' onClick=\'CargarTarjeta(event," + 
                 item.id + ", true)\' onTouchStart=\'(event," + item.id + ")\'><div style=\'overflow:hidden;width:" + ancho + "px;height:" + 
                 ancho + "px;border:1px solid;background-color:#ffffff\'><img id=\'img" + item.id + 
                 "\' src=\'img/imagen_no_disponible_" + ancho + ".jpg\' width=\'" + ancho + "\' />" + "</div></a></div>";
@@ -96,14 +99,46 @@ function RepresentarListaTarjetas(categoria, favoritas){
 			texto += "<div class=\'ui-block-c\'></div>";
 			break;
 	}
+	*/
+	var columna =1;
+	
+	$.each(listaTarjetas, function(i, item) {		
+		console.log("Comprobamos esta tarjeta para añadirla a la categoría ("+categoria.id+"): "+item.id+" con la categoria: "+item.categoria);
+		if (  ( (favoritas) && (item.favorita == 1) ) || ( (!favoritas) && (item.categoria == categoria.id) ) ) {
+			
+			// Maquetación de la tabla que llevará cada una de las imágenes relacionadas con la tarjeta
+			
+			if(columna ==1){
+				texto+="<tr>";
+			}
+			
+			texto += "<td><div class='contenedorImg'><a href=\'javascript:;\' onClick=\'CargarTarjeta(event," + item.id + ", true)\' onTouchStart=\'(event," + item.id + 
+			")\'><div class= 'divImgTarjeta conSombra'><img id=\'img" + item.id + "\' src=\'img/imagen_no_disponible_230.jpg\' />" + "</div></a></div></td>";
+			
+			columna++;
+			if (columna ==4){
+				texto+="</tr>";
+				columna=1;
+			}
+			
+			listaImagenesACargar.push(item);
+			contador += 1;
+			
+		}
+	});
+	
 	
 	// Actualización del grid de imágenes
 	//console.log("Este es el texto: " + texto);
-	$('#lblListaTarjetas').html(texto).grid();
+	$('#lblListaTarjetas').html(texto);
+	if (listaTarjetas.length <=2){
+		console.log("solo tenemos una tarjeta, establecemos su alto a: "+$('#PaginaDetalleCategoria').height()-100+"px");
+		$('.contenedorImg img').css('max-height',$('#PaginaDetalleCategoria').height()-100+"px")
+	}
 	
 	// Una vez que se haya cargado la lista de imágenes, hay que cargar sus rutas
 	$.each(listaImagenesACargar, function(i, item){
-		CargarFoto("img" + item.id, item.foto, item.anchoFoto, item.altoFoto);
+		CargarFoto("img" + item.id, item.foto);
 	});
 }
 
@@ -116,7 +151,7 @@ function RepresentarListaTarjetas(categoria, favoritas){
  * @param	anchoFoto			ancho en pixels de la foto original
  * @param	altoFoto			alto en pixels de la foto original
  */
-function CargarFoto(identificador, rutaFoto, anchoFoto, altoFoto){	
+function CargarFoto(identificador, rutaFoto){	
 	if (activarPhoneGap) {
 		// Solamente se comprueba si exista la fotografía en el caso de que está activado el PhoneGap.
 		
@@ -128,6 +163,7 @@ function CargarFoto(identificador, rutaFoto, anchoFoto, altoFoto){
 			else {
                 window.resolveLocalFileSystemURI(rutaFoto, function(fileEntry){
                     $("#" + identificador).attr("src", rutaFoto).on('load', function(){
+                        /*
                         if (anchoFoto < altoFoto){
                             switch(tipoDispositivo){
                                 case "iPhone3":
@@ -145,7 +181,7 @@ function CargarFoto(identificador, rutaFoto, anchoFoto, altoFoto){
                             }
                             // En el caso de que la altura sea mayor que el ancho, hay que desplazar la imagen para que quede centrada
                             // en altura
-                            $("#" + identificador).css("position", "relative").css("top", "-" + ((alto - ancho) / 2).toFixed(0).toString() + "px");
+                            //$("#" + identificador).css("position", "relative").css("top", "-" + ((alto - ancho) / 2).toFixed(0).toString() + "px");                            
                         }
                         else {
                             switch(tipoDispositivo){
@@ -166,8 +202,10 @@ function CargarFoto(identificador, rutaFoto, anchoFoto, altoFoto){
                             // centrada en anchura
                             $('#' + identificador).css("position", "relative").css("left", "-" + ((ancho - alto)/2).toFixed(0).toString() + "px");
                         }
+                       
                         $('#' + identificador).attr("width", ancho);
                         $('#' + identificador).attr("height", alto);
+                        */
                         //console.log("Ancho: " + anchoFoto + ", alto: " + altoFoto);
                     });
                 }, function(error){
@@ -218,25 +256,39 @@ function NuevaTarjeta(categoria, titulo1, titulo2, fondo, foto, sonido, ancho, a
             'favorita': 0, 
             'anchoFoto': ancho, 
             'altoFoto': alto, 
-            'fuente':fuente, 
-            'tamanioFuente': 25});
+            'fuente':fuente,
+            'idiomaDe':idiomaSecundario.toLowerCase(),
+            'idiomaA':idiomaPrincipal.toLowerCase() 
+           });
 		
 		// ... e inserción de la tarjeta en la base de datos
-		var sql = "insert into Tarjetas(id, categoria, titulo1, titulo2, fondo, foto, sonido, favorita, anchoFoto, altoFoto, fuente, tamanioFuente) values(" + 
+		var sql = "insert into Tarjetas(id, categoria, titulo1, titulo2, fondo, foto, sonido, favorita, anchoFoto, altoFoto, fuente, idiomaDe, idiomaA ) values(" + 
             (maxId+1) + "," + categoria + ",\'" + titulo1 + "\',\'" + titulo2 + "\',\'" + fondo + "\',\'" + foto + "\',\'" + sonido + "\',0," + ancho + 
-            "," + alto + ",'" + fuente + "'," + 25 + ")";
+            "," + alto + ",'" + fuente + "','"+idiomaSecundario.toLowerCase()+"','"+idiomaPrincipal.toLowerCase()+"')";
 		//console.log(sql);
 		bwBD.transaction(function(tx){
 			tx.executeSql(sql);
 		}, errorBD);
 		
-		// Actualización de la visualización de la lista de tarjetas ...
-		RepresentarListaTarjetas(categoriaActual);	
+		//Refrescamos el array con las tarjetas de la categoria actual
+		//console.log("la categoria es: "+categoria);
+		//console.log("Llamamos a obtenertarjetasporcategoria");
+		ObtenerTarjetasPorCategoria(categoria);
 		
-		// ... y actualización de la lista de categorías
+		
+		//console.log("Llamamos a reoresentarlistatarrjetas con el parametro categoriaActual = "+categoria);
+			
+				// ... y actualización de la lista de categorías
 		RepresentarCategorias();
 		
+		//Metemos el id de la categoría en un objeto debido a que RepresentarlistaTarjetas recibe un objeto y no un entero
+		var obj = new Object();
+		obj.id=categoria
+		// Actualización de la visualización de la lista de tarjetas ...
+		RepresentarListaTarjetas(obj,false);	
+		
 		tarjetaActual = null;
+
 	}
 	catch(e){
 		console.log(e);	
@@ -334,6 +386,11 @@ function CargarTarjeta(event, id, cambiarPagina){
 	
 	if (tarjetaActual.favorita == 1) {
 		$('#btnCambiarTarjetaFavorita').addClass("ui-btn-favorito");
+		/* TODO
+		 actualizar la tarjeta en la base de datos
+		
+		*/
+		
 	}
 	else {
 		$('#btnCambiarTarjetaFavorita').removeClass("ui-btn-favorito");
@@ -407,7 +464,9 @@ function ActualizarTarjeta(event, tarjeta){
         "', favorita=" + tarjeta.favorita + 
         ", anchoFoto=" + tarjeta.anchoFoto + 
         ", altoFoto=" + tarjeta.altoFoto + 
-        ", fuente='" + tarjeta.fuente + 
+        ", fuente='" + tarjeta.fuente +
+        "', idiomaDe='" +idiomaSecundario.toLowerCase() +
+        "', idiomaA='" +idiomaPrincipal.toLowerCase() +   
         "' WHERE id=" + tarjeta.id;
 	console.log("Actualizamos una tarjeta--> "+sql);
 	bwBD.transaction(function(tx){
@@ -513,7 +572,7 @@ function LimpiarTraduccion(){
 /*
  * Obtiene un Token de acceso al servidor de Microsoft Translate a través del servicio web
  */
-function getAccesToken(event){	
+function getAccessToken(){	
 	//Editado--> Pedro	
 	var urlObtenerAccesToken = 'http://www.bubblewords.info/WSTraducciones/GetAccessToken.asmx/getToken';
 	
@@ -524,14 +583,32 @@ function getAccesToken(event){
 		success: function(data){
    			accessToken=data[0];
     		//navigator.notification.alert("Hemos obtenido el token de acceso: "+accessToken)
+    		if (intervaloSinConexion){
+				clearInterval(intervaloSinConexion);
+				navigator.notification.alert("El servidor esta disponible, cambiamos o establecemos el intervalo a 9 minutos");
+				intervaloNormal = setInterval(getAccessToken, 9 * 60 * 1000);
+			}			
+			hayConexion=true;
 		},
 		timeout:5000,
 		error: function(x, t, m) {
-	        if(t==="timeout") {
-	            navigator.notification.alert(res_servidor_no_disponible);
-	        } else {
-	            navigator.notification.alert("Error :"+t);
-	        }
+			if (hayConexion ==true){
+				/*
+				*En caso de que se tenga conexion de red, pero no sea accesible el servicio web que nos devuelve el token de acceso
+				*solicitamos un token de acceso cada 30 segundos, hasta que el servidor responda, en cuyo caso se para el intervalo 
+				*sin conexión y comienza el intervalo normal de 9 minutos
+				*/
+				if (intervaloNormal){
+					clearInterval(intervaloNormal);
+					navigator.notification.alert("El servidor no esta disponible, cambiamos el intervalo a 1 minuto");
+					intervaloSinConexion = setInterval(getAccessToken, 30 * 1000);
+				}
+				if(t==="timeout") {
+			    	navigator.notification.alert(res_servidor_no_disponible,'',res_titulo_servidor_no_disponible,res_Aceptar);
+			    } else {
+			    	navigator.notification.alert(res_servidor_no_disponible+" Error: "+t,'',res_titulo_servidor_no_disponible,res_Aceptar);
+			    }
+			}
     	}
 	});
 /*
@@ -548,7 +625,9 @@ function getAccesToken(event){
  * Obtiene la traducción de un texto proporcionandole un idioma de origen y destino
  */
 function TraduccionSugerida(event){
-	if (valorAnteriorTitulo != $('#inputTituloTarjeta').val()){		
+	console.log("Hay conexion = "+hayConexion);
+	console.log("Se ha traducido "+numTraducciones+" veces");
+	if (valorAnteriorTitulo != $('#inputTituloTarjeta').val() && hayConexion && (!liteVersion || (liteVersion && numTraducciones < 5))){		
 		var texto=$('#inputTituloTarjeta').attr('value');
 		var origen =$('#lstIdiomaSecundario').attr('value');
 		var destino = $('#lstIdiomaPrincipal').attr('value');
@@ -571,18 +650,50 @@ function TraduccionSugerida(event){
 			});	
 		}		
 		valorAnteriorTitulo=texto;
+		PararEvento(event);
+	}else if(valorAnteriorTitulo != $('#inputTituloTarjeta').val() && hayConexion && numTraducciones >=5 && alertMostrado==false){
+		console.log("entramos por el mensaje de limitacion de trad.");
+		$('#inputTitulo2Tarjeta').focus();	
+		navigator.notification.confirm('Recuerde que la versión lite sólo le permite traducir 5 veces.\nSi desea usar el traductor automatico de forma ilimitada puede comprar la versión completa ahora.',
+		function(buttonIndex){
+			if (buttonIndex == 1){
+				switch(device.platform.toUpperCase()){
+					case "ANDROID":
+						window.open("https://play.google.com/store/apps/details?id=es.karonte.BubbleWordsTalkPro", '_system');					
+						break;				
+					case "IOS":
+						window.open("https://itunes.apple.com/es/app/id641448326?mt=8", '_system');
+						break;				
+				}
+			}
+			
+		},
+		'Actualize a Bubble Words Pro',
+		'Comprar,Más Tarde');
+		alertMostrado=true;
+	}else{
+		console.log("entramos por el ultimo else");
+		/*
+		 * En caso de que no haya conexion o que la palabra sea la misma que la anterior, 
+		 * establecemos el foco en el segundo titulo.
+		 */
+		$('#inputTitulo2Tarjeta').focus();	
 	}
-	PararEvento(event);
+	
 }
 /*
  * Callback que controla la respuesta del servidor de Microsoft Translator
  */
 function ajaxTranslateCallback(response) {	
-	if (response.length > 0) {
+	if (response.length > 0) {			
 		traduccionSugerida = response;
 		//navigator.notification.alert("La traduccion se ha recibido con exito: "+traduccionSugerida);
 		$('#lblTraduccionObtenida').html(response.toString());
-		$('#pnlResultadoTraduccion').addClass("in").css('zIndex', 3).find('.tooltip-inner').textfill({maxFontPixels: 200, minFontPixels:4});                    
+		$('#pnlResultadoTraduccion').addClass("in").css('zIndex', 300);
+		$('.tooltip-inner').textfill({maxFontPixels: 200, minFontPixels:4});      
+		if (liteVersion){
+			numTraducciones++;
+		}              
 	}	
 }
 
@@ -590,7 +701,10 @@ function ajaxTranslateCallback(response) {
  * AplicarTraduccion. Se ha pulsado sobre la opción de aplicar la traducción sugerida.
  */
 function AplicarTraduccion(event){
-	$('#inputTitulo2Tarjeta').attr('value', traduccionSugerida);	
+	$('#inputTitulo2Tarjeta').attr('value', traduccionSugerida);
+	$('#pnlResultadoTraduccion').css('zIndex', -200);
+	LimpiarTraduccion();
+	
 	PararEvento(event);
 }
 

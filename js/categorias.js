@@ -3,21 +3,23 @@ var listaCategorias = [];
 var categoriaActual = null;
 var categoriasEnEdicion = false;
 var seleccionarCategorias = false;
+var tarjetasPorCategoria = [];
 
 /*--- MÉTODOS RELACIONADOS ---*/
 
 /**
  * RepresentarCategorias. Realiza la maquetación de la lista de las categorias en el componente HTML destinado a mostrarlas.
  */
-function RepresentarCategorias(){
+function RepresentarCategorias(){	
 	// Limpieza de la lista de categorías
+	
 	$('#lstCategorias').empty();
 	$('#inputCategoriaRelacionada').empty();
-		
-	
+
 	// Inclusión de las categorías en la lista correspondiente
 	$.each(listaCategorias, function(i, item){
 		//$('#lstCategorias').append("<li data-theme=\'c\'><a href=\'javascript:;\' onClick=\'CargarCategoria(event, " + item.id + ",false)\' onTouchStart=\'CargarCategoria(event," + item.id + ",false)\' class=\'ui-link-inherit\'><h3>" + item.nombre + "</h3><p>" + item.descripcion + "</p><span class=\'ui-li-count\'>" + ContarTarjetasPorCategoria(parseInt(item.id)) + "</span></a></li>");
+		console.log("Añadimos las categorias");
 		$('#lstCategorias').append("<li><a href=\'javascript:;\' onClick=\'CargarCategoria(event, " + item.id + ",false)\' class=\'ui-link-inherit\'><h3>" + item.nombre + "</h3><p>" + item.descripcion + "</p><span class=\'ui-li-count\'>" + ContarTarjetasPorCategoria(parseInt(item.id)) + "</span></a></li>");
 
 		console.log("Número de tarjetas por categoría (" + item.id + ") = " + ContarTarjetasPorCategoria(item.id));
@@ -152,12 +154,13 @@ function CargarCategoria(event, id , favoritas){
 			$('#PaginaDetalleCategoria a:eq(0) span.ui-btn-text').html('<i class="icon-chevron-left"></i>');	
 		});
 		$('#PaginaDetalleCategoria a:eq(0) span.ui-btn-text').html('<i class="icon-chevron-left"></i><i class="icon-home"></i>');
-		
+		ObtenerTarjetasFavoritas();
 	}
 	else {
 		// Búsqueda de la categoría seleccionada 
 		if (SeleccionarCategoriaPorId(id)){
 			$('#h1NombreCategoria').html(categoriaActual.nombre);
+			ObtenerTarjetasPorCategoria(id);
 		}
 		
 		// Se comprueba si la lista de categorías está en el modo edición o no, para mostrar la categoría en sí
@@ -183,7 +186,7 @@ function CargarCategoria(event, id , favoritas){
            // if (event!=null){
             	PararEvento(event);
            // }
-		}		
+		}	
 	}
 	
 	//if (event!=null){
@@ -242,15 +245,19 @@ function EliminarListaCategorias(){
  * ActivarSeleccionCategorias. Indica que se debe activar la selección de categorías, en el formulario de la nueva tarjeta
  */
 function ActivarSeleccionCategorias(){
-	seleccionarCategorias = true;
+	console.log("Mostramos el select");
 	
-    $('#pnlSeleccionDeCategoria').addClass('in').css('height', 'auto').css('display', 'inline');
-    $('#inputCategoriaRelacionada').css('height', 'auto');
+	seleccionarCategorias = true;	
+    $('#pnlSeleccionDeCategoria').show();//.addClass('in');
+    $('#inputCategoriaRelacionada').show();
 }
 
 function DesactivarSeleccionCategorias(){
+	console.log("Ocultamos el select");
 	seleccionarCategorias = false;
-	
+	/*
 	$('#pnlSeleccionDeCategoria').removeClass('in').css('height', '0').css('display','none');
-    $('#inputCategoriaRelacionada').css('height', '0');
+    $('#inputCategoriaRelacionada').css('height', '0');*/
+    $('#pnlSeleccionDeCategoria').hide();//.addClass('in');
+    $('#inputCategoriaRelacionada').hide();
 }

@@ -2,9 +2,10 @@
 <widget xmlns = "http://www.w3.org/ns/widgets"
     xmlns:gap = "http://phonegap.com/ns/1.0"
     id        = "es.karonte.BubbleWordsTalk"
-    version   = "1.0.1">
-
-<name>Bubble Words</name>
+    version   = "1.0.2">
+    
+<!-- Version Pro para Android -->
+<name>Bubble Words Pro</name>
 
 <description>
 Tarjetas con palabras para aprender en otros idiomas
@@ -18,7 +19,7 @@ Karonte. Servicios en Internet. S.L.
 <preference name="phonegap-version" value="2.3.0" />
 <preference name="orientation" value="portrait" />
 <preference name="stay-in-webview" value="true" />
-<preference name="loadingdialog" value="Bubble Words Talk, Loading..." />
+<preference name="loadingdialog" value="Bubble Words Talk Pro, Loading..." />
 <preference name="splash-screen-duration" value="30000" />
 <preference name="webviewbounce" value="false" />
 
@@ -75,6 +76,7 @@ Karonte. Servicios en Internet. S.L.
 <gap:plugin name="FacebookConnect">
 	<param name="APP_ID" value="471428772926328" />
 </gap:plugin>
+
 
 
 <!-- Para Android -->

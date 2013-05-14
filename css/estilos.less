@@ -299,6 +299,105 @@ a{
     color:white;
     text-shadow: 0 1px 0 #000000;
 }
+#lblListaTarjetas{
+    width:100%;    
+}
+#lblListaTarjetas td{
+    width:33%;
+    padding:2%;
+}
+#lblListaTarjetas img{
+    max-height:200px;
+}
+
+.nombrefunction(@color){
+    color:@color;   
+}
+
+#TutorialTarjetas{
+    width:100%;
+    height:100%;
+    position: absolute;
+    left: 0;
+    background-color: white;
+    opacity: 0.9;
+    display:none;
+    p{
+        font-family: 'Just Me Again Down Here', cursive;
+        text-align:center;
+        font-size: 4em;
+        line-height: 1em;
+        padding-left: 5%;
+        padding-right: 5%;
+        opacity: 1;
+    }
+    img{
+        position:fixed;
+        bottom:20%;        
+        width:30%;
+        border:none;
+        }
+    #leftImg{
+        left:2%;
+    }
+    #rightImg{
+        right:2%;
+    }
+}
+.contenedorImg{
+    background-color: white;
+    border-radius: 6px;
+    max-height: 200px;
+}
+.divImgTarjeta{
+    overflow:hidden;
+    width:100%;
+    height:100%;
+    text-align:center;
+    border:none;
+    background-color: white;
+    border-radius: 6px;
+    //background-color:#ffffff;
+    img{
+        width:90%;
+        padding-top: 5%;
+        padding-bottom: 5%;
+    }
+}
+#PaginaDetalleTarjeta_content, #PaginaReversoTarjeta_content{
+    position:relative;
+}
+#fondoTransparente{
+    //asignamos el degradado radial y lo ajustamos a la pantalla
+    background:transparent url("../img/degradado.png") top left no-repeat;
+    background-size:100% 100%;
+    z-index:1;
+    width: 99.9%;
+    height: 100.9%;
+    position: absolute;
+    top: 0;
+    left: 0;    
+    }
+.contenedorTitulo{
+    background-color:#3baefb;
+    margin-top: 10%;
+    text-align: center;
+    color: black;
+    padding: 2%;
+    text-align:center;
+    border-radius:30px;
+    line-height: 200%;
+    border:solid white 2px;
+    text-shadow:0 2px 0 #000000;
+}
+.tituloReverso{
+    background-color: #FBBE2F !important;
+    color:black !important;
+    text-shadow:0 2px 0 #ffffff !important;
+}
+#PaginaDetalleCategoria .ui-content{
+    overflow-x: visible;
+}
 /*
 #lblListaTarjetas img{
     padding:15%;    
@@ -373,21 +472,25 @@ and (max-device-width : 1024px) {
     .ui-navbar li .ui-btn-icon-right .ui-icon {
         zoom:1.5 !important;
     }
+     .ui-select .ui-btn-icon-right .ui-btn-inner {
+        font-size: 1.5em !important;
+        padding: 1.5em !important;
+    }
 //}
 
 /* Ipad----------- */
-@media only screen and (-webkit-min-device-pixel-ratio : 1.5) and (min-width: 768px),
-only screen and (min-device-pixel-ratio : 1.5) and (min-width: 768px){
+
+@media only screen and (device-width: 768px) {
 /* Styles */
- div.ui-select div{
-        height: 3.8em !important;
-    }
-    .field-Carrot {
-        height: 3em !important;
+    div.ui-select div{
+        height: 6.2em !important;
     }
     .ui-select .ui-btn-icon-right .ui-btn-inner {
-        font-size: 1em !important;
-        padding: 1em !important;
+        font-size: 1.5em !important;
+        padding: 1.5em !important;
+    }
+    .contenedorTitulo{
+        margin-top:5% !important;
     }
 }
 
@@ -746,8 +849,10 @@ and (max-width : 480px) {
 /* DEFINICIÓN DE ETIQUETAS HTML */
 body{   
     //asignamos el background 
-    background:#0A6B3E url("../img/bgStripe.png") top left !important;
-    z-index:0;
+    background: url("../img/degradado.png"), url("../img/bgStripe.png") !important;
+    z-index: 0;
+    background-repeat: no-repeat;
+    background-size: 100% 100% , auto! IMportant;
     /*
     @media(max-width:768px){
         .control-group .field-icon-Emerland{
@@ -773,11 +878,7 @@ body{
         }             
     }*/
 }
-.ui-page{
-    //asignamos el degradado radial y lo ajustamos a la pantalla
-    background:transparent url("../img/degradado.png") top left no-repeat;
-    background-size:100% 100%;
-    z-index:1;
+.ui-page{  
     -webkit-backface-visibility:hidden;
     }
     /*
