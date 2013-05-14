@@ -285,9 +285,12 @@ function onBackButton(event){
 	if ( $('.ui-page-active').attr('id')=="PaginaInicial"){
 		navigator.app.exitApp();
 	}else{
-		Volver(event);
-	}
-	
+		tarjetaEnEdicion = false;
+		if (categoriasEnEdicion == true){
+			reiniciaCategorias();
+		}	
+		Volver(event);		
+	}	
 }
 
 /**
@@ -314,10 +317,7 @@ function DetectarDimensiones (){
 function Volver(e){
 	e.stopPropagation();
 	e.preventDefault();
-	history.back();
-	if (categoriasEnEdicion == true){
-		reiniciaCategorias();
-	}
+	history.back();	
 }
 
 function Volver2Veces(e){
