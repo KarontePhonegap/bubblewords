@@ -39,7 +39,7 @@ function inicializar(){
 	
 	navigator.splashscreen.hide();
 	// Initialize the Facebook SDK
-	
+	/*
 	try{	  
 		FB.init({
 			appId: '471428772926328',
@@ -54,7 +54,7 @@ function inicializar(){
 		navigator.notification.alert("Error: "+e);
 	}
 	
-	
+	*/
 	
 	
 	//Aplicamos estilos mediante jquery

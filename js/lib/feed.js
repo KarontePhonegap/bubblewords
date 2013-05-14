@@ -13,13 +13,13 @@ function publishStory() {
     var indice;
     if(idiomaPrincipal.toLowerCase() == "es"){
         indice=0;
-        navigator.notification.alert("El idioma principal es Español");
+       // navigator.notification.alert("El idioma principal es Español");
     }else{
         indice=1;
-        navigator.notification.alert("El idioma principal es Ingles");
+       // navigator.notification.alert("El idioma principal es Ingles");
     }
-    console.log("Tarjeta actual/ idioma de: "+tarjetaActual.idiomaDe+" idioma a: "+tarjetaActual.idiomaA);
-    console.log("Contenido del feed: "+res_Compartir+" "+objIdiomas[tarjetaActual.idiomaDe][indice]+" = "+tarjetaActual.titulo1+" / "+objIdiomas[tarjetaActual.idiomaA][indice]+" = "+tarjetaActual.titulo2)
+   // console.log("Tarjeta actual/ idioma de: "+tarjetaActual.idiomaDe+" idioma a: "+tarjetaActual.idiomaA);
+    //console.log("Contenido del feed: "+res_Compartir+" "+objIdiomas[tarjetaActual.idiomaDe][indice]+" = "+tarjetaActual.titulo1+" / "+objIdiomas[tarjetaActual.idiomaA][indice]+" = "+tarjetaActual.titulo2)
 
     contenido =res_Compartir+" "+objIdiomas[tarjetaActual.idiomaDe][indice]+" = "+tarjetaActual.titulo1+" / "+objIdiomas[tarjetaActual.idiomaA][indice]+" = "+tarjetaActual.titulo2;
       if (tarjetaActual){
@@ -33,10 +33,10 @@ function publishStory() {
         actions: [{ name: res_Descargar, link: 'https://play.google.com/store/apps/details?id=es.karonte.BubbleWordsTalkPro' }],
       }, 
       function(response) {
-        console.log('publishStory UI response: ', response);
+        //console.log('publishStory UI response: ', response);
       });
   }else{
-      navigator.notification.alert("Error al compratir tarjeta");
+      //navigator.notification.alert("Error al compratir tarjeta");
   }
 }
 
