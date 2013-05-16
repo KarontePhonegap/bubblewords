@@ -2,9 +2,8 @@
 <widget xmlns = "http://www.w3.org/ns/widgets"
     xmlns:gap = "http://phonegap.com/ns/1.0"
     id        = "es.karonte.BubbleWordsTalk"
-    version   = "1.0.2">
-    
-<!-- Version Pro para Android -->
+    version   = "1.0.1">
+
 <name>Bubble Words</name>
 
 <description>
@@ -76,7 +75,6 @@ Karonte. Servicios en Internet. S.L.
 <gap:plugin name="FacebookConnect">
 	<param name="APP_ID" value="471428772926328" />
 </gap:plugin>
-
 
 
 <!-- Para Android -->
