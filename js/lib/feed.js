@@ -30,7 +30,7 @@ function publishStory() {
         description: contenido,
         link: 'http://www.bubblewords.info',
         picture: "http://www.bubblewords.info/img/Ico512x512.png",
-        actions: [{ name: res_Descargar, link: 'https://play.google.com/store/apps/details?id=es.karonte.BubbleWordsTalkPro' }],
+        actions: [{ name: res_Descargar, link: 'http://www.bubblewords.info' }],
       }, 
       function(response) {
         //console.log('publishStory UI response: ', response);

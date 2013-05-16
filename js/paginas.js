@@ -11,7 +11,6 @@ var idiomaSistema;
 var hayConexion;
 var intervaloNormal, intervaloSinConexion,intervaloComprobarConexion;
 var networkState;
-var liteVersion= true; //Activa o desactiva las limitaciones de la version lite
 var numTraducciones=0;
 var alertMostrado = false;
 function inicializar(){
@@ -39,10 +38,10 @@ function inicializar(){
 	
 	navigator.splashscreen.hide();
 	// Initialize the Facebook SDK
-	/*
+	
 	try{	  
 		FB.init({
-			appId: '471428772926328',
+			appId: '191807040969117',
 			nativeInterface: CDV.FB,
 			useCachedDialogs: false
 		});	
@@ -54,7 +53,6 @@ function inicializar(){
 		navigator.notification.alert("Error: "+e);
 	}
 	
-	*/
 	
 	
 	//Aplicamos estilos mediante jquery
@@ -110,16 +108,15 @@ function inicializar(){
 			$('#btnTarjetaSonido i').removeClass('desactivado');
 			$('#btnTarjetaSonido').removeClass('btn-desactivado');
 		}		
-		if (listaCategorias.length > 0 && listaTarjetas.length==2 && mostrarTutorial){
-			mostrarTutorial=false;
-			bwBD.transaction(function(tx){
-				console.log("Intentamos insertar registro en appdata");
-				tx.executeSql("INSERT INTO AppData VALUES('FALSE')");
-			},errorBD,ComprobacionCorrecta);
-			
-			$('#TutorialTarjetas p').html(res_tutorial_tarjetas);
-			$('#TutorialTarjetas').fadeIn().css('z-index','200').on('touchstart',function(){
+		if (listaCategorias.length > 0 && listaTarjetas.length==2 && mostrarTutorial){			
+			$('#TutorialTarjetas div p').html(res_tutorial_tarjetas);
+			$('#TutorialTarjetas').fadeIn().css('z-index','200').on('touchstart',function(){				
 				$('#TutorialTarjetas').fadeOut();
+				mostrarTutorial=false;
+				bwBD.transaction(function(tx){
+					console.log("Intentamos insertar registro en appdata");
+					tx.executeSql("INSERT INTO AppData VALUES('FALSE')");
+				},errorBD,ComprobacionCorrecta);
 			});			
 		}
 		
@@ -310,7 +307,24 @@ function DetectarDimensiones (){
 		}
 	}	
 }
-
+function mensajeActualizar(mensaje){
+	navigator.notification.confirm(mensaje,
+		function(buttonIndex){
+			if (buttonIndex == 1){
+				switch(device.platform.toUpperCase()){
+					case "ANDROID":
+						window.open("https://play.google.com/store/apps/details?id=es.karonte.BubbleWordsTalkPro", '_system');					
+						break;				
+					case "IOS":
+						window.open("https://itunes.apple.com/es/app/id641448326?mt=8", '_system');
+						break;				
+				}
+			}
+			
+		},
+		res_lite_actualizar,
+		res_lite_botones);	
+}
 /**
  * Volver. Retrocede una posición en la historia (para el botón 'Atrás')
  */
@@ -367,7 +381,7 @@ function ComprobarEliminarTodo(evento){
 /**
  * LimpiadoFormularioNuevaTarjeta. Elimina los valores previamente introducidos del formulario de Nueva tarjeta
  */
-function LimpiadoFormularioNuevaTarjeta(event){
+function LimpiadoFormularioNuevaTarjeta(){
     $('#lblTituloNuevaTarjeta').html(res_TituloNuevaTarjeta);
     $('#btnCrearBubble').html(res_InsertarNuevaTarjeta);
     
@@ -395,7 +409,7 @@ function LimpiadoFormularioNuevaTarjeta(event){
     
     $('#pnlMostrarTextoFondo').addClass('in').show();
     
-    LimpiarTraduccion(event);
+    $('#lblTraduccionObtenida').html("");
     
     RepresentarCategorias();
     
@@ -404,6 +418,7 @@ function LimpiadoFormularioNuevaTarjeta(event){
 
 	$('#imgPrincipalTarjetaGaleria').attr('src','');
 	$('#imgPrincipalTarjetaCamara').attr('src','');
+	$('#imgFondoTarjeta').attr('src','');
     existeFoto = false;
     anchoFoto = 0;
     altoFoto = 0;
@@ -426,7 +441,7 @@ $('#lnkNuevaTarjetaPrincipal').on('touchStart click', function(event){
 			maxId = item.id;
 		}
 	});
-	if ((!liteVersion)||(liteVersion && maxId < 5)){
+	if ((!liteVersion)||(liteVersion && maxId < maxBubbles)){
 		// Se comprueba si hay alguna categoria
 		LimpiadoFormularioNuevaTarjeta(event);
 	    //console.log("Nº de categorías: " + listaCategorias.length);
@@ -439,21 +454,7 @@ $('#lnkNuevaTarjetaPrincipal').on('touchStart click', function(event){
 	        $.mobile.changePage($('#PaginaNuevaTarjeta'));
 	    }		
 	}else if(maxId >0){
-		navigator.notification.confirm('Recuerde que la versión lite sólo le permite crear 5 Bubbles.\nSi desea crear mas puede comprar la versión completa ahora.',
-		function(buttonIndex){
-			if (buttonIndex == 1){
-				switch(device.platform.toUpperCase()){
-					case "ANDROID":
-						window.open("https://play.google.com/store/apps/details?id=es.karonte.BubbleWordsTalkPro", '_system');					
-						break;				
-					case "IOS":
-						window.open("https://itunes.apple.com/es/app/id641448326?mt=8", '_system');
-						break;				
-				}
-			}
-		},
-		'Actualize a Bubble Words Pro',
-		'Comprar,Más Tarde');
+		mensajeActualizar(res_lite_bubbles);		
 	}	
 });
 
@@ -472,24 +473,10 @@ $('#btnAnadirCategoria').on('touchStart click', function(event){
 			maxId = item.id;
 		}
 	});
-	if ((!liteVersion)||(liteVersion && maxId < 1)){
+	if ((!liteVersion)||(liteVersion && maxId < maxCategorias)){
 		$.mobile.changePage($('#PaginaNuevaCategoria'));
 	}else if(maxId >0){
-		navigator.notification.confirm('Recuerde que la versión lite sólo le permite crear 1 categoría.\nSi desea crear mas puede comprar la versión completa ahora.',
-		function(buttonIndex){
-			if (buttonIndex == 1){
-				switch(device.platform.toUpperCase()){
-					case "ANDROID":
-						window.open("https://play.google.com/store/apps/details?id=es.karonte.BubbleWordsTalkPro", '_system');					
-						break;				
-					case "IOS":
-						window.open("https://itunes.apple.com/es/app/id641448326?mt=8", '_system');
-						break;				
-				}
-			}
-		},
-		'Actualize a Bubble Words Pro',
-		'Comprar,Más Tarde');
+		mensajeActualizar(res_lite_categorias);
 	}
 });
 
@@ -515,27 +502,13 @@ $('#lnkNuevaTarjeta').on('touchStart click', function(event){
 			maxId = item.id;
 		}
 	});
-	if ((!liteVersion)||(liteVersion && maxId < 5)){
+	if ((!liteVersion)||(liteVersion && maxId < maxBubbles)){
 		// Ocultar la selección de categoría
 		DesactivarSeleccionCategorias();		
 		LimpiadoFormularioNuevaTarjeta(event);		
 		$.mobile.changePage($('#PaginaNuevaTarjeta'));			
 	}else if(maxId >0){
-		navigator.notification.confirm('Recuerde que la versión lite sólo le permite crear 5 Bubbles.\nSi desea crear mas puede comprar la versión completa ahora.',
-		function(buttonIndex){
-			if (buttonIndex == 1){
-				switch(device.platform.toUpperCase()){
-					case "ANDROID":
-						window.open("https://play.google.com/store/apps/details?id=es.karonte.BubbleWordsTalkPro", '_system');					
-						break;				
-					case "IOS":
-						window.open("https://itunes.apple.com/es/app/id641448326?mt=8", '_system');
-						break;				
-				}
-			}
-		},
-		'Actualize a Bubble Words Pro',
-		'Comprar,Más Tarde');
+		mensajeActualizar(res_lite_bubbles);
 	}
 });
 
@@ -749,6 +722,8 @@ $('#btnCrearBubble').on('touchStart click', function(event){
     }
     else {
         if ((TieneCaracteres('#inputTituloTarjeta')) && (TieneCaracteres('#inputTitulo2Tarjeta'))) {
+        	console.log("El fondo actual es: "+fondoActual);
+        	console.log("El fondo seleccionado es:"+$('#imgFondoTarjeta').attr('src'));
             fondo = fondoActual;
             
             nombreBubble = $.trim($('#inputTituloTarjeta').attr('value'));
@@ -792,6 +767,7 @@ $('#btnCrearBubble').on('touchStart click', function(event){
             
             NuevaTarjeta(cat, nombreBubble, traduccionBubble, fondo, foto, sonido, anchoFoto, altoFoto, fuente);	
             
+            fondoActual=1;
            
             $.mobile.changePage($('#PaginaDetalleCategoria'));
         
@@ -904,13 +880,12 @@ $('#lstIdiomaSecundario').on('change', function(event){
 	CambiarIdiomas($('#lstIdiomaPrincipal').attr('value'),$('#lstIdiomaSecundario').attr('value'));
 });
 $('#btnEliminarTodo').on('touchEvent click', function(event){
-	/* TODO
 	navigator.notification.confirm(
 		res_DescripcionEliminarTodo, 	// Mensaje
 		ComprobarEliminarTodo,			// Función	
 		res_EliminarInformacion	,		// Título
 		'Ok, Cancel');
-	*/
+	
 	EliminarTodo();	
 	PararEvento(event);
 });

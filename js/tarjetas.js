@@ -257,15 +257,16 @@ function NuevaTarjeta(categoria, titulo1, titulo2, fondo, foto, sonido, ancho, a
             'anchoFoto': ancho, 
             'altoFoto': alto, 
             'fuente':fuente,
-            'idiomaDe':idiomaSecundario.toLowerCase(),
-            'idiomaA':idiomaPrincipal.toLowerCase() 
+            'idiomaA':idiomaSecundario.toLowerCase(),
+            'idiomaDe':idiomaPrincipal.toLowerCase() 
            });
 		
 		// ... e inserción de la tarjeta en la base de datos
-		var sql = "insert into Tarjetas(id, categoria, titulo1, titulo2, fondo, foto, sonido, favorita, anchoFoto, altoFoto, fuente, idiomaDe, idiomaA ) values(" + 
+		var sql = "insert into Tarjetas(id, categoria, titulo1, titulo2, fondo, foto, sonido, favorita, anchoFoto, altoFoto, fuente, idiomaA, idiomaDe ) values(" + 
             (maxId+1) + "," + categoria + ",\'" + titulo1 + "\',\'" + titulo2 + "\',\'" + fondo + "\',\'" + foto + "\',\'" + sonido + "\',0," + ancho + 
             "," + alto + ",'" + fuente + "','"+idiomaSecundario.toLowerCase()+"','"+idiomaPrincipal.toLowerCase()+"')";
-		//console.log(sql);
+		console.log("El fondo es el numero: "+fondo);
+		console.log("Creamos una nueva tarjeta, SQL: "+sql);
 		bwBD.transaction(function(tx){
 			tx.executeSql(sql);
 		}, errorBD);
@@ -465,8 +466,8 @@ function ActualizarTarjeta(event, tarjeta){
         ", anchoFoto=" + tarjeta.anchoFoto + 
         ", altoFoto=" + tarjeta.altoFoto + 
         ", fuente='" + tarjeta.fuente +
-        "', idiomaDe='" +idiomaSecundario.toLowerCase() +
-        "', idiomaA='" +idiomaPrincipal.toLowerCase() +   
+        "', idiomaA='" +idiomaSecundario.toLowerCase() +
+        "', idiomaDe='" +idiomaPrincipal.toLowerCase() +   
         "' WHERE id=" + tarjeta.id;
 	console.log("Actualizamos una tarjeta--> "+sql);
 	bwBD.transaction(function(tx){
@@ -629,8 +630,8 @@ function TraduccionSugerida(event){
 	console.log("Se ha traducido "+numTraducciones+" veces");
 	if (valorAnteriorTitulo != $('#inputTituloTarjeta').val() && hayConexion && (!liteVersion || (liteVersion && numTraducciones < 5))){		
 		var texto=$('#inputTituloTarjeta').attr('value');
-		var origen =$('#lstIdiomaSecundario').attr('value');
-		var destino = $('#lstIdiomaPrincipal').attr('value');
+		var destino =$('#lstIdiomaSecundario').attr('value');
+		var origen = $('#lstIdiomaPrincipal').attr('value');
 		if(origen != destino){
 			console.log("traduccion> de: "+origen+" destino "+destino+" palabra "+texto);
 			var p = new Object;
@@ -651,25 +652,10 @@ function TraduccionSugerida(event){
 		}		
 		valorAnteriorTitulo=texto;
 		PararEvento(event);
-	}else if(valorAnteriorTitulo != $('#inputTituloTarjeta').val() && hayConexion && numTraducciones >=5 && alertMostrado==false){
+	}else if(valorAnteriorTitulo != $('#inputTituloTarjeta').val() && hayConexion && numTraducciones >=maxTraducciones && alertMostrado==false){
 		console.log("entramos por el mensaje de limitacion de trad.");
-		$('#inputTitulo2Tarjeta').focus();	
-		navigator.notification.confirm('Recuerde que la versión lite sólo le permite traducir 5 veces.\nSi desea usar el traductor automatico de forma ilimitada puede comprar la versión completa ahora.',
-		function(buttonIndex){
-			if (buttonIndex == 1){
-				switch(device.platform.toUpperCase()){
-					case "ANDROID":
-						window.open("https://play.google.com/store/apps/details?id=es.karonte.BubbleWordsTalkPro", '_system');					
-						break;				
-					case "IOS":
-						window.open("https://itunes.apple.com/es/app/id641448326?mt=8", '_system');
-						break;				
-				}
-			}
-			
-		},
-		'Actualize a Bubble Words Pro',
-		'Comprar,Más Tarde');
+		$('#inputTitulo2Tarjeta').focus();
+		mensajeActualizar(res_lite_traducciones);		
 		alertMostrado=true;
 	}else{
 		console.log("entramos por el ultimo else");

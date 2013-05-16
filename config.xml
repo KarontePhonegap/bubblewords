@@ -2,8 +2,9 @@
 <widget xmlns = "http://www.w3.org/ns/widgets"
     xmlns:gap = "http://phonegap.com/ns/1.0"
     id        = "es.karonte.BubbleWordsTalk"
-    version   = "1.0.1">
-
+    version   = "1.0.2">
+    
+<!-- Version Lite para Android -->
 <name>Bubble Words</name>
 
 <description>
@@ -27,15 +28,15 @@ Karonte. Servicios en Internet. S.L.
 
 <!-- Iconos -->
 <!-- iOS -->
-<icon src="res/icon/ios/icon-57.png" gap:platform="ios" width="57" height="57" />
-<icon src="res/icon/ios/icon-72.png" gap:platform="ios" width="72" height="72" />
-<icon src="res/icon/ios/Ico114x114.png" gap:platform="ios" width="114" height="114" />
+<icon src="res/icon/lite/ios/icon-57.png" gap:platform="ios" width="57" height="57" />
+<icon src="res/icon/lite/ios/icon-72.png" gap:platform="ios" width="72" height="72" />
+<icon src="res/icon/lite/ios/Ico114x114.png" gap:platform="ios" width="114" height="114" />
 
 <!-- Android -->
-<icon src="res/icon/android/Ico36x36.png" gap:platform="android" gap:density="ldpi" />
-<icon src="res/icon/android/Ico48x48.png" gap:platform="android" gap:density="mdpi" />
-<icon src="res/icon/android/Ico72x72.png" gap:platform="android" gap:density="hdpi" />
-<icon src="res/icon/android/Ico96x96.png" gap:platform="android" gap:density="xhdpi" />
+<icon src="res/icon/lite/android/Ico36x36.png" gap:platform="android" gap:density="ldpi" />
+<icon src="res/icon/lite/android/Ico48x48.png" gap:platform="android" gap:density="mdpi" />
+<icon src="res/icon/lite/android/Ico72x72.png" gap:platform="android" gap:density="hdpi" />
+<icon src="res/icon/lite/android/Ico96x96.png" gap:platform="android" gap:density="xhdpi" />
 
 
 <!-- Pantallas de inicio -->
@@ -73,8 +74,9 @@ Karonte. Servicios en Internet. S.L.
 <!-- Plugins necesarios -->
 
 <gap:plugin name="FacebookConnect">
-	<param name="APP_ID" value="471428772926328" />
+	<param name="APP_ID" value="191807040969117" />
 </gap:plugin>
+
 
 
 <!-- Para Android -->

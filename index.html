@@ -64,7 +64,7 @@
 	        	<div data-role="navbar" data-iconpos="right">
 	            	<ul>
 	                	<li>
-	                        <a data-role="button"  id="btnEditarCategorias"><span id="lblEditarCategoria"><i class="icon-edit"></i></span></a>
+	                        <a data-role="button"  id="btnEditarCategorias"><span id="lblEditarCategoria"><i class="icon-remove"></i></span></a>
 	                    </li>
 	                    <li>
 	                        <a href="javascript:;" id="btnAnadirCategoria" data-role="button" data-theme="e"><span id="lblNuevaCategoria"><i class="icon-plus"></i></span></a>  
@@ -132,7 +132,9 @@
 	            <h1 id="h1NombreTarjeta">Bubble</h1>
 	        </div>
 	        <div id='TutorialTarjetas'>
-	    		<p></p>
+	    		<div>
+	    			<p></p>
+	    		</div>
 	    		<div>
 	    			<img id='leftImg' src='img/arrow-left.png'/>
 	    		</div>
@@ -169,13 +171,11 @@
 	                    	<a href="javascript:;" id="btnCambiarTarjetaFavorita" data-role="button"><i class="icon-heart"></i></a>
 	                    </li>
 	                    <li>
-	                        <a href="javascript:;" id="btnEliminaTarjeta" data-role="button"><i class="icon-remove"></i></a>                    	
-	                    </li>
-	                    <!--
-	                    <li>
 	                    	<a href="#" onclick="publishStory()" id="btnCompartirFB" data-role="button"><i class="icon-facebook-sign"></i></a>    
 	                    </li>
-	                    -->
+	                    <li>
+	                        <a href="javascript:;" id="btnEliminaTarjeta" data-role="button"><i class="icon-remove"></i></a>                    	
+	                    </li>                    	                    
 	                </ul>
 	            </div>
 	        </div>
@@ -568,8 +568,9 @@
     <script type="text/javascript" src="js/idiomas-es.js"></script>
     <script type="text/javascript" src="js/idiomas-en.js"></script>
     <script type="text/javascript" src="js/idiomas.js"></script>
+    <script type="text/javascript" src="js/lite.js"></script>
     
-    <!--
+
     <script src="cdv-plugin-fb-connect.js"></script>
  	<script src="facebook-js-sdk.js"></script> 	 	
 	<script src="js/lib/_config.js"></script>
@@ -579,7 +580,7 @@
 	<script src="js/lib/graph_api.js"></script>
 	<script src="js/lib/requests.js"></script>
 	<script src="js/credits.js"></script>
-	-->
+
 	 	
     <script type="text/javascript">		
 		

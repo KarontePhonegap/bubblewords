@@ -123,6 +123,21 @@ res_guia_3="Now we will create our first bubble, remember that you must fill it'
 res_guia_3_titulo="Creating our first bubble";//revisar traduccion
 res_tutorial_tarjetas="To navigate between Bubbles, slide your finger to the sides ";//revisar traduccion
 
+//Version Lite
+//COMPROBAR TRADUCCION
+
+res_lite_actualizar='Update now to the full version of BubbleWords';
+res_lite_botones='Buy,Later';
+res_lite_bubbles='Remember that with lite verison you can only create '+maxBubbles+' Bubbles.\nIf you want to create more, you can buy the full version now.';
+res_lite_categorias='Remember that with lite verison you can only create '+maxCategorias;
+if (maxCategorias>1){
+    res_lite_categorias+='categories.'
+}else{
+    res_lite_categorias+='category.'
+}
+res_lite_categorias+='\nIf you want to create more, you can buy the full version now.';
+res_lite_traducciones='Remember that with lite verison you can only translate '+maxTraducciones+' times.\nIf you want to translate more, you can buy the full version now.'
+
 
 //otros
 res_servidor_no_disponible="Not possible to connect to the translation server. Translate service is not available.";//revisar traduccion

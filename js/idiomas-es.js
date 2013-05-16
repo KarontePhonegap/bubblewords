@@ -119,6 +119,19 @@ res_guia_3="Ahora creamos nuestro primer bubble, recuerda que es imprescindible 
 res_guia_3_titulo="Creando nuestro primer bubble";
 res_tutorial_tarjetas="Puede navegar entre los Bubbles de la categoría, deslizando el dedo hacia los lados";
 
+//Version Lite
+res_lite_actualizar='Actualize a la versión completa de Bubble Words';
+res_lite_botones='Comprar,Más Tarde';
+res_lite_bubbles='Recuerde que la versión lite sólo le permite crear '+maxBubbles+' Bubbles.\nSi desea crear más puede comprar la versión completa ahora.';
+res_lite_categorias='Recuerde que la versión lite sólo le permite crear '+maxCategorias;
+if (maxCategorias>1){
+    res_lite_categorias+='categorias.'
+}else{
+    res_lite_categorias+='categoría.'
+}
+res_lite_categorias+='\nSi desea crear mas puede comprar la versión completa ahora.';
+res_lite_traducciones='Recuerde que la versión lite sólo le permite traducir '+maxTraducciones+' veces.\nSi desea traducir más puede comprar la versión completa ahora.'
+
 
 //Otros
 res_servidor_no_disponible="El servidor de traducción no esta disponible. La traducción automática no funcionará.";
