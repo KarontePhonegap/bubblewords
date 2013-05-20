@@ -51,7 +51,7 @@ function inicializar(){
 		updateAuthElements();
 		
 	}catch(e){
-		navigator.notification.alert("Error: "+e);
+		console.error("Facebook Error: "+e);
 	}
 	
 	
@@ -148,21 +148,21 @@ function inicializar(){
 	}).on('swipeleft',function(event){
 		for (var i=0;i<tarjetasPorCategoria.length;i++){
 			if (tarjetasPorCategoria[i].id>tarjetaActual.id){
-				console.log("Encontramos la proxima tarjeta");
-				CargarTarjeta(event,tarjetasPorCategoria[i].id,true);
+				animaBubble(event, $(this),'left',i);					
+				tarjetaActual=tarjetasPorCategoria[i];
 				break;
 			}
 		}		
 	}).on('swiperight',function(event){
 		for (var i=tarjetasPorCategoria.length-1;i>=0;i--){
 			if (tarjetasPorCategoria[i].id<tarjetaActual.id){				
-				CargarTarjeta(event,tarjetasPorCategoria[i].id,true);
+				animaBubble(event, $(this),'right',i);	
+				tarjetaActual=tarjetasPorCategoria[i];
 				break;
 			}
 		}		
 	});
-	
-		
+			
 	
 	document.addEventListener("backbutton",onBackButton,false);
 	// Detección del dispositivo
