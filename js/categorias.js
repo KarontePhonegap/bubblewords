@@ -61,7 +61,7 @@ function CambiarModoEdicionCategorias(){
 			// Iconos de 'siguiente' en la lista
 			$('#lstCategorias li div span.ui-icon')	.removeClass('ui-icon-minus', 1000).addClass('ui-icon-arrow-r', 1000);
 			// Cambiar la palabra del botón de Edición
-			$('#btnEditarCategorias span.ui-btn-text').html('<i class="icon-edit"></i>');
+			$('#btnEditarCategorias span.ui-btn-text').html('<i class="icon-remove"></i>');
 		}	
 	}
 }
@@ -71,7 +71,7 @@ function reiniciaCategorias(){
 	// Iconos de 'siguiente' en la lista
 	$('#lstCategorias li div span.ui-icon')	.removeClass('ui-icon-minus', 1000).addClass('ui-icon-arrow-r', 1000);
 	// Cambiar la palabra del botón de Edición
-	$('#btnEditarCategorias span.ui-btn-text').html('<i class="icon-edit"></i>');
+	$('#btnEditarCategorias span.ui-btn-text').html('<i class="icon-remove"></i>');
 }
 
 /**
@@ -229,7 +229,7 @@ function EliminaCategoriaActual(event){
     }
     //$('#lstCategorias li div span.ui-icon').removeClass('ui-icon-arrow-r', 1000).addClass('ui-icon-minus', 1000);
     categoriasEnEdicion = false;
-	$('#btnEditarCategorias span.ui-btn-text').html('<i class="icon-edit"></i>');
+	$('#btnEditarCategorias span.ui-btn-text').html('<i class="icon-remove"></i>');
     
 }
 

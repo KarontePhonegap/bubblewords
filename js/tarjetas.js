@@ -427,7 +427,7 @@ function ReversoTarjeta(event){
 		
 		
 		// Se cambia a la página del reverso
-		$.mobile.changePage($('#PaginaReversoTarjeta'), {transition: 'flip'});
+		$.mobile.changePage($('#PaginaReversoTarjeta'), {transition: 'flip',changeHash:'false'});
 		ReproducirSonidoEstatico();
 		PararEvento(event);
 	}

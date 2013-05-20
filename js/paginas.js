@@ -35,6 +35,7 @@ function inicializar(){
 	//Declaramos los event handlers para cuando se obtiene o pierde la conexion.
 	document.addEventListener("offline", sinConexion, false);
 	document.addEventListener("online", conConexion, false);
+	document.addEventListener("resume", checkConnection, false);
 	
 	navigator.splashscreen.hide();
 	// Initialize the Facebook SDK
@@ -107,8 +108,10 @@ function inicializar(){
 		}else{
 			$('#btnTarjetaSonido i').removeClass('desactivado');
 			$('#btnTarjetaSonido').removeClass('btn-desactivado');
-		}		
-		if (listaCategorias.length > 0 && listaTarjetas.length==2 && mostrarTutorial){			
+		}
+		ObtenerTarjetasPorCategoria(categoriaActual.id);
+		console.log("Hay "+tarjetasPorCategoria.length+" tarjetas en esta categoria");
+		if (listaCategorias.length > 0 && tarjetasPorCategoria.length==2 && mostrarTutorial){			
 			$('#TutorialTarjetas div p').html(res_tutorial_tarjetas);
 			$('#TutorialTarjetas').fadeIn().css('z-index','200').on('touchstart',function(){				
 				$('#TutorialTarjetas').fadeOut();
@@ -160,9 +163,9 @@ function inicializar(){
 	});
 	
 		
-	// Detección del dispositivo
-	document.addEventListener("backbutton",onBackButton,false);
 	
+	document.addEventListener("backbutton",onBackButton,false);
+	// Detección del dispositivo
 	DetectarDimensiones();
 }
 /*
@@ -451,7 +454,7 @@ $('#lnkNuevaTarjetaPrincipal').on('touchStart click', function(event){
 	    else {
 	        // Activa la selección de categoría    
 	        ActivarSeleccionCategorias();
-	        $.mobile.changePage($('#PaginaNuevaTarjeta'));
+	        $.mobile.changePage($('#PaginaNuevaTarjeta'),{changeHash:'false'});
 	    }		
 	}else if(maxId >0){
 		mensajeActualizar(res_lite_bubbles);		
@@ -506,7 +509,7 @@ $('#lnkNuevaTarjeta').on('touchStart click', function(event){
 		// Ocultar la selección de categoría
 		DesactivarSeleccionCategorias();		
 		LimpiadoFormularioNuevaTarjeta(event);		
-		$.mobile.changePage($('#PaginaNuevaTarjeta'));			
+		$.mobile.changePage($('#PaginaNuevaTarjeta'),{changeHash:'false'});			
 	}else if(maxId >0){
 		mensajeActualizar(res_lite_bubbles);
 	}
@@ -642,7 +645,7 @@ $('#btnImagenFondoTarjeta').on('touchStart click', function(event){
 		$('#lstFondosParaTarjeta').append("<div><a href='javascript:;' onClick=\"SeleccionarFondoTarjeta(event, '"+i+"','" + tipoDispositivo + "',true)\">"+imagen+"</a></div>");
 		
 	}
-	$.mobile.changePage($('#PaginaElegirFondo'));	
+	$.mobile.changePage($('#PaginaElegirFondo'),{changeHash:'false'});	
 	PararEvento(event);
 });
 
@@ -831,7 +834,7 @@ $('#btnTarjetaEditar').on('touchStart click', function(event){
         
         
         // Ir a la página de inserción de tarjetas
-        $.mobile.changePage($('#PaginaNuevaTarjeta'));	
+        $.mobile.changePage($('#PaginaNuevaTarjeta'),{changeHash:'false'});	
     }
     catch(e){
         //console.log(e.message);
