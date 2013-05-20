@@ -583,10 +583,10 @@ function getAccessToken(){
 		dataType: 'jsonp',
 		success: function(data){
    			accessToken=data[0];
-    		//navigator.notification.alert("Hemos obtenido el token de acceso: "+accessToken)
+    		//navigator.notification.confirm("Hemos obtenido el token de acceso: "+accessToken)
     		if (intervaloSinConexion){
 				clearInterval(intervaloSinConexion);
-				navigator.notification.alert("El servidor esta disponible, cambiamos o establecemos el intervalo a 9 minutos");
+				navigator.notification.confirm("El servidor esta disponible, cambiamos o establecemos el intervalo a 9 minutos");
 				intervaloNormal = setInterval(getAccessToken, 9 * 60 * 1000);
 			}			
 			hayConexion=true;
@@ -601,13 +601,13 @@ function getAccessToken(){
 				*/
 				if (intervaloNormal){
 					clearInterval(intervaloNormal);
-					navigator.notification.alert("El servidor no esta disponible, cambiamos el intervalo a 1 minuto");
+					navigator.notification.confirm("El servidor no esta disponible, cambiamos el intervalo a 1 minuto");
 					intervaloSinConexion = setInterval(getAccessToken, 30 * 1000);
 				}
 				if(t==="timeout") {
-			    	navigator.notification.alert(res_servidor_no_disponible,'',res_titulo_servidor_no_disponible,res_Aceptar);
+			    	navigator.notification.confirm(res_servidor_no_disponible,'',res_titulo_servidor_no_disponible,res_Aceptar);
 			    } else {
-			    	navigator.notification.alert(res_servidor_no_disponible+" Error: "+t,'',res_titulo_servidor_no_disponible,res_Aceptar);
+			    	navigator.notification.confirm(res_servidor_no_disponible+" Error: "+t,'',res_titulo_servidor_no_disponible,res_Aceptar);
 			    }
 			}
     	}
@@ -616,7 +616,7 @@ function getAccessToken(){
 	$.getJSON(urlObtenerAccesToken + '?callback=?'
 	, function(data){
  	    accessToken=data[0];
- 	    //navigator.notification.alert("Hemos obtenido el token de acceso: "+accessToken)
+ 	    //navigator.notification.confirm("Hemos obtenido el token de acceso: "+accessToken)
 	});
 	*/
     PararEvento(event);
@@ -641,7 +641,7 @@ function TraduccionSugerida(event){
 			p.oncomplete = 'ajaxTranslateCallback';
 			p.appId = "Bearer " + accessToken;
 			var requestStr = "http://api.microsofttranslator.com/V2/Ajax.svc/Translate";
-			//navigator.notification.alert("Solicitamos la traduccion: texto="+p.text+" origen="+p.from+" destino="+p.to+" token="+p.appId);
+			//navigator.notification.confirm("Solicitamos la traduccion: texto="+p.text+" origen="+p.from+" destino="+p.to+" token="+p.appId);
 			$.ajax({
 				url: requestStr,
 				type: "GET",
@@ -673,7 +673,7 @@ function TraduccionSugerida(event){
 function ajaxTranslateCallback(response) {	
 	if (response.length > 0) {			
 		traduccionSugerida = response;
-		//navigator.notification.alert("La traduccion se ha recibido con exito: "+traduccionSugerida);
+		//navigator.notification.confirm("La traduccion se ha recibido con exito: "+traduccionSugerida);
 		$('#lblTraduccionObtenida').html(response.toString());
 		$('#pnlResultadoTraduccion').addClass("in").css('zIndex', 300);
 		$('.tooltip-inner').textfill({maxFontPixels: 200, minFontPixels:4});      

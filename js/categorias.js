@@ -129,6 +129,7 @@ function SeleccionarCategoriaPorId(id){
  */
 function CargarCategoria(event, id , favoritas){
 	if (favoritas) {
+		ObtenerTarjetasFavoritas();
 		$('#h1NombreCategoria').html("Favoritas");
 		categoriasEnEdicion = false;
 		
@@ -157,10 +158,11 @@ function CargarCategoria(event, id , favoritas){
 		ObtenerTarjetasFavoritas();
 	}
 	else {
+		ObtenerTarjetasPorCategoria(id);
 		// Búsqueda de la categoría seleccionada 
 		if (SeleccionarCategoriaPorId(id)){
 			$('#h1NombreCategoria').html(categoriaActual.nombre);
-			ObtenerTarjetasPorCategoria(id);
+			//ObtenerTarjetasPorCategoria(id);
 		}
 		
 		// Se comprueba si la lista de categorías está en el modo edición o no, para mostrar la categoría en sí

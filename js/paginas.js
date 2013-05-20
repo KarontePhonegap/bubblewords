@@ -64,7 +64,7 @@ function inicializar(){
 	$('#PaginaCategorias').on('pageshow',function(){  	
 		//update($(this).find('.jtextfill span'));
 		 if (listaCategorias.length == 0 && mostrarTutorial){
-			navigator.notification.alert(
+			navigator.notification.confirm(
 		    res_guia_1,
 		    '',
 		    res_guia_1_titulo,
@@ -77,7 +77,7 @@ function inicializar(){
 	$('#PaginaNuevaCategoria').on('pageshow',function(){  	
 		//update($(this).find('.jtextfill span'));
 		 if (listaCategorias.length == 0 && mostrarTutorial){
-			navigator.notification.alert(
+			navigator.notification.confirm(
 		   	res_guia_2,
 		    '',
 		    res_guia_2_titulo,
@@ -86,10 +86,10 @@ function inicializar(){
 		}
 			  
 	});
-	$('#PaginaDetalleCategoria').on('pageshow',function(){  	
+	$('#PaginaDetalleCategoria').on('pageshow',function(){  
 		//update($(this).find('.jtextfill span'));
 		 if (listaCategorias.length > 0 && listaTarjetas.length==0 && mostrarTutorial){
-			navigator.notification.alert(
+			navigator.notification.confirm(
 		    res_guia_3,
 		    '',
 		    res_guia_3_titulo,
@@ -98,7 +98,7 @@ function inicializar(){
 			
 		}				  
 	});
-		
+
 	$('#PaginaDetalleTarjeta').on('pageshow',function(){  	
 		//update($(this).find('.jtextfill span'));
 		$('.jtextfill').textfill({maxFontPixels: 200});
@@ -109,7 +109,7 @@ function inicializar(){
 			$('#btnTarjetaSonido i').removeClass('desactivado');
 			$('#btnTarjetaSonido').removeClass('btn-desactivado');
 		}
-		ObtenerTarjetasPorCategoria(categoriaActual.id);
+		
 		console.log("Hay "+tarjetasPorCategoria.length+" tarjetas en esta categoria");
 		if (listaCategorias.length > 0 && tarjetasPorCategoria.length==2 && mostrarTutorial){			
 			$('#TutorialTarjetas div p').html(res_tutorial_tarjetas);
@@ -135,7 +135,8 @@ function inicializar(){
 		}		
 	}).on('swiperight',function(event){
 		for (var i=tarjetasPorCategoria.length-1;i>=0;i--){
-			if (tarjetasPorCategoria[i].id<tarjetaActual.id){				
+			if (tarjetasPorCategoria[i].id<tarjetaActual.id){
+				console.log("Encontramos la tarjeta anterior");			
 				animaBubble(event, $(this),'right',i);	
 				tarjetaActual=tarjetasPorCategoria[i];
 				break;
@@ -143,11 +144,13 @@ function inicializar(){
 		}		
 	});
 	
-	$('#PaginaReversoTarjeta').on('pageshow',function(){  	
+	$('#PaginaReversoTarjeta').on('pageshow',function(){		
+		console.log("Hay "+tarjetasPorCategoria.length+" tarjetas en favoritas");
 		$('.jtextfillReverso').textfill({maxFontPixels: 200});		  
 	}).on('swipeleft',function(event){
 		for (var i=0;i<tarjetasPorCategoria.length;i++){
 			if (tarjetasPorCategoria[i].id>tarjetaActual.id){
+				console.log("Encontramos la proxima tarjeta");
 				animaBubble(event, $(this),'left',i);					
 				tarjetaActual=tarjetasPorCategoria[i];
 				break;
@@ -155,7 +158,8 @@ function inicializar(){
 		}		
 	}).on('swiperight',function(event){
 		for (var i=tarjetasPorCategoria.length-1;i>=0;i--){
-			if (tarjetasPorCategoria[i].id<tarjetaActual.id){				
+			if (tarjetasPorCategoria[i].id<tarjetaActual.id){
+				console.log("Encontramos la tarjeta anterior");				
 				animaBubble(event, $(this),'right',i);	
 				tarjetaActual=tarjetasPorCategoria[i];
 				break;
@@ -261,7 +265,7 @@ function checkConnection() {
 function sinConexion(){
 	console.log("Sin Conexion");
 	hayConexion =false;
-	navigator.notification.alert(res_conexion_no_disponible, '', res_titulo_conexion, res_Aceptar);
+	navigator.notification.confirm(res_conexion_no_disponible, '', res_titulo_conexion, res_Aceptar);
 }
 /*
  * Solicitamos un token de acceso al reestablecerse la conexión y creamos el intervalo de peticion normal
@@ -449,7 +453,7 @@ $('#lnkNuevaTarjetaPrincipal').on('touchStart click', function(event){
 		LimpiadoFormularioNuevaTarjeta(event);
 	    //console.log("Nº de categorías: " + listaCategorias.length);
 	    if (listaCategorias.length == 0) {
-	        navigator.notification.alert(res_SinCategoria);
+	        navigator.notification.confirm(res_SinCategoria);
 	    }
 	    else {
 	        // Activa la selección de categoría    
@@ -719,7 +723,7 @@ $('#btnCrearBubble').on('touchStart click', function(event){
             }
             else {
                 // Se le indica al usuario que no están todos los campos obligatorios
-                navigator.notification.alert("Hay campos obligatorios sin completar");	
+                navigator.notification.confirm("Hay campos obligatorios sin completar");	
             }
         }
     }
@@ -779,7 +783,7 @@ $('#btnCrearBubble').on('touchStart click', function(event){
         }
         else {
             // No se han establecido los elementos necesarios para la inserción de un nuevo Bubble
-            navigator.notification.alert(res_CamposObligatorios);
+            navigator.notification.confirm(res_CamposObligatorios);
         }
     }
 	
