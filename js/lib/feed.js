@@ -6,8 +6,6 @@
 //////////////////////////
 
 //Publish a story to the user's own wall
-
-
 function publishStory() {   
     var contenido ="";
     var indice;

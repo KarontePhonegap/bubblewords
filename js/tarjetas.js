@@ -131,9 +131,13 @@ function RepresentarListaTarjetas(categoria, favoritas){
 	// Actualización del grid de imágenes
 	//console.log("Este es el texto: " + texto);
 	$('#lblListaTarjetas').html(texto);
-	if (listaTarjetas.length <=2){
-		console.log("solo tenemos una tarjeta, establecemos su alto a: "+$('#PaginaDetalleCategoria').height()-100+"px");
-		$('.contenedorImg img').css('max-height',$('#PaginaDetalleCategoria').height()-100+"px")
+	//ObtenerTarjetasPorCategoria(categoria.id);
+	
+	if (tarjetasPorCategoria.length <=2){		
+		var altoPag =parseFloat($('#PaginaDetalleCategoria').height());
+		var altoImagen = altoPag-(altoPag*0.4);
+		//navigator.notification.alert("El alto de la pagina es de: "+altoPag+"+px el alto de la imagen es: "+altoImagen+"px");
+		$('.contenedorImg img').css('max-height',altoImagen.toString()+"px");		
 	}
 	
 	// Una vez que se haya cargado la lista de imágenes, hay que cargar sus rutas
@@ -586,7 +590,8 @@ function getAccessToken(){
     		//navigator.notification.confirm("Hemos obtenido el token de acceso: "+accessToken)
     		if (intervaloSinConexion){
 				clearInterval(intervaloSinConexion);
-				navigator.notification.confirm("El servidor esta disponible, cambiamos o establecemos el intervalo a 9 minutos");
+				intervaloSinConexion=undefined;
+				console.warn("El servidor esta disponible, cambiamos o establecemos el intervalo a 9 minutos");
 				intervaloNormal = setInterval(getAccessToken, 9 * 60 * 1000);
 			}			
 			hayConexion=true;
@@ -601,7 +606,8 @@ function getAccessToken(){
 				*/
 				if (intervaloNormal){
 					clearInterval(intervaloNormal);
-					navigator.notification.confirm("El servidor no esta disponible, cambiamos el intervalo a 1 minuto");
+					intervaloNormal=undefined;
+					console.warn("El servidor no esta disponible, cambiamos el intervalo a 30 segundos");
 					intervaloSinConexion = setInterval(getAccessToken, 30 * 1000);
 				}
 				if(t==="timeout") {

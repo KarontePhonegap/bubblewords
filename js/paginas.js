@@ -32,28 +32,15 @@ function inicializar(){
 	comprobarTablas();	
 	ObtenerAppData();
 	
+
+	
+	
 	//Declaramos los event handlers para cuando se obtiene o pierde la conexion.
 	document.addEventListener("offline", sinConexion, false);
 	document.addEventListener("online", conConexion, false);
 	document.addEventListener("resume", checkConnection, false);
 	
-	navigator.splashscreen.hide();
-	// Initialize the Facebook SDK
-	
-	try{	  
-		FB.init({
-			appId: '191807040969117',
-			nativeInterface: CDV.FB,
-			useCachedDialogs: false
-		});	
-		FB.getLoginStatus(handleStatusChange);
-		authUser();
-		updateAuthElements();
-		
-	}catch(e){
-		console.error("Facebook Error: "+e);
-	}
-	
+
 	
 	
 	//Aplicamos estilos mediante jquery
@@ -63,41 +50,28 @@ function inicializar(){
 	
 	$('#PaginaCategorias').on('pageshow',function(){  	
 		//update($(this).find('.jtextfill span'));
-		 if (listaCategorias.length == 0 && mostrarTutorial){
-			navigator.notification.confirm(
-		    res_guia_1,
-		    '',
-		    res_guia_1_titulo,
-		    res_Aceptar
-			);
-		}
-			  
+		if (listaCategorias.length == 0 && mostrarTutorial){		 		
+			navigator.notification.alert(res_guia_1,alertCallBack,res_guia_1_titulo,res_Aceptar);				
+		}			  
 	});
 	
 	$('#PaginaNuevaCategoria').on('pageshow',function(){  	
 		//update($(this).find('.jtextfill span'));
-		 if (listaCategorias.length == 0 && mostrarTutorial){
-			navigator.notification.confirm(
-		   	res_guia_2,
-		    '',
-		    res_guia_2_titulo,
-		    res_Aceptar
-			);
+		if (listaCategorias.length == 0 && mostrarTutorial){
+		 	navigator.notification.alert(res_guia_2,alertCallBack,res_guia_2_titulo,res_Aceptar);			
 		}
 			  
 	});
 	$('#PaginaDetalleCategoria').on('pageshow',function(){  
 		//update($(this).find('.jtextfill span'));
-		 if (listaCategorias.length > 0 && listaTarjetas.length==0 && mostrarTutorial){
-			navigator.notification.confirm(
-		    res_guia_3,
-		    '',
-		    res_guia_3_titulo,
-		    res_Aceptar
-			);
-			
+		if (listaCategorias.length > 0 && listaTarjetas.length==0 && mostrarTutorial){
+			navigator.notification.alert(res_guia_3,alertCallBack,res_guia_3_titulo,res_Aceptar);			
 		}				  
 	});
+	
+	function alertCallBack(){
+		console.log("Se ha cerrado el alert");
+	}
 
 	$('#PaginaDetalleTarjeta').on('pageshow',function(){  	
 		//update($(this).find('.jtextfill span'));
@@ -171,6 +145,30 @@ function inicializar(){
 	document.addEventListener("backbutton",onBackButton,false);
 	// Detección del dispositivo
 	DetectarDimensiones();
+	navigator.splashscreen.hide();
+	//Inicializamos Facebook
+	var gAppID = '191807040969117';
+	
+	FB.init({
+		appId: gAppID,
+		nativeInterface: CDV.FB,
+		useCachedDialogs: false
+	});	   
+	FB.getLoginStatus(handleStatusChange);
+	authUser();
+	updateAuthElements();
+	
+	/*
+	
+	FB.init({
+		appId: gAppID,
+		nativeInterface: CDV.FB,
+		status     : true,
+		useCachedDialogs: false
+  	});
+	FB.Event.subscribe('auth.statusChange', handleStatusChange);
+	FB.getLoginStatus(handleStatusChange);
+	*/
 }
 /*
  * Funcion que realiza la animación a la hora de cambiar de bubble y actualiza la información.
@@ -265,7 +263,7 @@ function checkConnection() {
 function sinConexion(){
 	console.log("Sin Conexion");
 	hayConexion =false;
-	navigator.notification.confirm(res_conexion_no_disponible, '', res_titulo_conexion, res_Aceptar);
+	navigator.notification.alert(res_conexion_no_disponible, '', res_titulo_conexion, res_Aceptar);
 }
 /*
  * Solicitamos un token de acceso al reestablecerse la conexión y creamos el intervalo de peticion normal
@@ -453,7 +451,7 @@ $('#lnkNuevaTarjetaPrincipal').on('touchStart click', function(event){
 		LimpiadoFormularioNuevaTarjeta(event);
 	    //console.log("Nº de categorías: " + listaCategorias.length);
 	    if (listaCategorias.length == 0) {
-	        navigator.notification.confirm(res_SinCategoria);
+	        navigator.notification.alert(res_SinCategoria);
 	    }
 	    else {
 	        // Activa la selección de categoría    
@@ -723,7 +721,7 @@ $('#btnCrearBubble').on('touchStart click', function(event){
             }
             else {
                 // Se le indica al usuario que no están todos los campos obligatorios
-                navigator.notification.confirm("Hay campos obligatorios sin completar");	
+                navigator.notification.alert(res_CamposObligatorios);
             }
         }
     }
@@ -783,7 +781,7 @@ $('#btnCrearBubble').on('touchStart click', function(event){
         }
         else {
             // No se han establecido los elementos necesarios para la inserción de un nuevo Bubble
-            navigator.notification.confirm(res_CamposObligatorios);
+            navigator.notification.alert(res_CamposObligatorios);
         }
     }
 	

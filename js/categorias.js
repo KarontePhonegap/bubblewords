@@ -155,7 +155,7 @@ function CargarCategoria(event, id , favoritas){
 			$('#PaginaDetalleCategoria a:eq(0) span.ui-btn-text').html('<i class="icon-chevron-left"></i>');	
 		});
 		$('#PaginaDetalleCategoria a:eq(0) span.ui-btn-text').html('<i class="icon-chevron-left"></i><i class="icon-home"></i>');
-		ObtenerTarjetasFavoritas();
+
 	}
 	else {
 		ObtenerTarjetasPorCategoria(id);

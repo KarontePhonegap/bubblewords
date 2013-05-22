@@ -436,7 +436,7 @@ a{text-decoration:none !important;}
 #fondoTransparente{background:transparent url("../img/degradado.png") top left no-repeat;background-size:100% 100%;z-index:1;width:99.9%;height:100.9%;position:absolute;top:0;left:0;}
 .contenedorTitulo{background-color:#3baefb;margin-top:10%;color:black;padding:2%;text-align:center;border-radius:30px;line-height:200%;border:solid white 2px;text-shadow:0 2px 0 #000000;}
 .tituloReverso{background-color:#FBBE2F !important;color:black !important;text-shadow:0 2px 0 #ffffff !important;}
-#PaginaDetalleCategoria .ui-content{overflow-x:visible;}
+#PaginaDetalleCategoria .ui-content{overflow-x:visible;padding-bottom:20%;}
 .ui-header .ui-title{font-size:2em !important;margin-top:1em !important;}
 .ui-header>.ui-btn{margin-top:0.5em !important;}.ui-header>.ui-btn .ui-btn-inner{font-size:2em !important;}
 .ui-btn-inner{font-size:2em !important;}
