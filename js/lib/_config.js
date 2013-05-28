@@ -9,17 +9,17 @@ var gAppID = '191807040969117';
 //Initialize the Facebook SDK
 //See https://developers.facebook.com/docs/reference/javascript/
 window.fbAsyncInit = function() {
-  FB.init({ 
-    appId: gAppID,
-    status: true,
-    cookie: true,
-    xfbml: true,
-    frictionlessRequests: true,
-    useCachedDialogs: true,
-    oauth: true
-  });  
+    FB.init({ 
+        appId: gAppID,
+        nativeInterface: CDV.FB,
+        status: true,
+        cookie: true,
+        xfbml: true,
+        frictionlessRequests: true,
+        oauth: true,        
+        useCachedDialogs: false
+    });  
   authUser();
-  checkForCredits();
   updateAuthElements();
 };
 /*

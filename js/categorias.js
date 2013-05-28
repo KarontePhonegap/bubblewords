@@ -12,7 +12,6 @@ var tarjetasPorCategoria = [];
  */
 function RepresentarCategorias(){	
 	// Limpieza de la lista de categorías
-	
 	$('#lstCategorias').empty();
 	$('#inputCategoriaRelacionada').empty();
 
@@ -131,8 +130,8 @@ function CargarCategoria(event, id , favoritas){
 	if (favoritas) {
 		ObtenerTarjetasFavoritas();
 		$('#h1NombreCategoria').html("Favoritas");
-		categoriasEnEdicion = false;
-		
+		$('#PaginaDetalleCategoria a:eq(0) span.ui-btn-text').html('<i class="icon-chevron-left"></i><i class="icon-home"></i>');
+		categoriasEnEdicion = false;		
 		RepresentarListaTarjetas(0, favoritas);
 		
 		// Ocultar el botón de nueva tarjeta en la página de la lista de tarjetas
@@ -142,22 +141,11 @@ function CargarCategoria(event, id , favoritas){
 		$.mobile.changePage($('#PaginaDetalleCategoria'));
 		
 		//Cambiamos el funcionamiento del boton atrás para que no nos devuelva a la lista de categorias
-		//y nos envie directamente al menu principal
-		$('#PaginaDetalleCategoria a:eq(0)').on('click',function(event){
-			PararEvento(event);
-			//Redirigimos al menu principal			
-			if (favoritas){
-				$.mobile.changePage($('#PaginaInicial'));
-				favoritas=false;
-			}else{
-				$.mobile.changePage($('#PaginaCategorias'));	
-			}				
-			$('#PaginaDetalleCategoria a:eq(0) span.ui-btn-text').html('<i class="icon-chevron-left"></i>');	
-		});
-		$('#PaginaDetalleCategoria a:eq(0) span.ui-btn-text').html('<i class="icon-chevron-left"></i><i class="icon-home"></i>');
+		//y nos envie directamente al menu principal		
+		$('#PaginaDetalleCategoria a:eq(0)').on('click',cambiaBtnAtras);
+				
 
-	}
-	else {
+	}else {
 		ObtenerTarjetasPorCategoria(id);
 		// Búsqueda de la categoría seleccionada 
 		if (SeleccionarCategoriaPorId(id)){
@@ -194,6 +182,19 @@ function CargarCategoria(event, id , favoritas){
 	//if (event!=null){
 		PararEvento(event);
 	//}
+}
+function cambiaBtnAtras(event){		
+	PararEvento(event);				
+	//Redirigimos al menu principal					
+	favoritas=false;
+	//Limpiamos el intervalo que anima al imagen
+	clearInterval(animaImagen);
+	//ocultamos el mensaje de tarjetas favoritas vacias
+	$('#TarjetasVacias').hide();
+	$.mobile.changePage($('#PaginaInicial'));
+	//$('#PaginaDetalleCategoria a:eq(0) span.ui-btn-text').html('<i class="icon-chevron-left"></i>');
+	$('#PaginaDetalleCategoria a:eq(0) span.ui-btn-text').html('<i class="icon-chevron-left"></i>');
+	$('#PaginaDetalleCategoria a:eq(0)').off('click',cambiaBtnAtras);		
 }
 
 /**

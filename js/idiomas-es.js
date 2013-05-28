@@ -118,7 +118,7 @@ res_guia_2_titulo="Creando nuestra primera categoría";
 res_guia_3="Ahora creamos nuestro primer bubble, recuerda que es imprescindible rellenar el nombre y la traducción, además podrás añadir imágenes, grabaciones, fondos, etc. para que personalices tus bubble de forma única";
 res_guia_3_titulo="Creando nuestro primer bubble";
 res_tutorial_tarjetas="Puede navegar entre los Bubbles de la categoría, deslizando el dedo hacia los lados";
-
+res_no_favoritos="Aún no ha añadido ninguna tarjeta a sus favoritas, para ello sólo tiene que pulsar en el botón de favorito.";
 //Version Lite
 res_lite_actualizar='Actualize a la versión completa de Bubble Words';
 res_lite_botones='Comprar,Más Tarde';
@@ -132,10 +132,15 @@ if (maxCategorias>1){
 res_lite_categorias+='\nSi desea crear mas puede comprar la versión completa ahora.';
 res_lite_traducciones='Recuerde que la versión lite sólo le permite traducir '+maxTraducciones+' veces.\nSi desea traducir más puede comprar la versión completa ahora.'
 
+//Facebook
+res_quitar_permisos_fb="¿Esta seguro de que desea quitar los permisos de publicación en Facebook?";
+res_titulo_permisos_fb="Permisos de Publicación";
+res_eliminar_permisos="Quitar permisos de Facebook";
 
 //Otros
 res_servidor_no_disponible="El servidor de traducción no esta disponible. La traducción automática no funcionará.";
 res_titulo_servidor_no_disponible="Traducción no disponible";
 res_conexion_no_disponible="No hay conexion de red, el servicio de traducción no estará disponible.";
 res_titulo_conexion="No hay conexión";
+
 

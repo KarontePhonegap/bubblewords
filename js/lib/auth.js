@@ -9,62 +9,82 @@ var user = [];
 
 var permissions = ['user_status', 'publish_checkins', 'user_likes'];
 
-//Detect when Facebook tells us that the user's session has been returned
 
+//Detect when Facebook tells us that the user's session has been returned
 function authUser() {
   FB.Event.subscribe('auth.statusChange', handleStatusChange);
 }
 
 // Handle status changes
-function handleStatusChange(session) {
-    console.log('Got the user\'s session: ' + JSON.stringify(session));
-    
-    if (session.authResponse) {
-        //document.body.className = 'connected';
-        
-        //Fetch user's id, name, and picture
-        FB.api('/me', {
-          fields: 'name, picture'
-        },
-        function(response) {
-          if (!response.error) {
-            user = response;
-            
-            console.log('Got the user\'s name and picture: ' + JSON.stringify(response));
-            
-            //Update display of user name and picture
-            
-            if (document.getElementById('user-name')) {
-              document.getElementById('user-name').innerHTML = user.name;
-            }
-            if (document.getElementById('user-picture')) {
-              document.getElementById('user-picture').src = user.picture.data.url;
-            }
-          
-          } else {
-          	console.log('Error getting user info: ' + JSON.stringify(response.error));
-            // Check for errors due to app being unininstalled
-            if (response.error.error_subcode && response.error.error_subcode == "458") {
-              setTimeout(function() {
-                alert("The app was removed. Please log in again.");
-              }, 0);              
-            }
-            logout();         
-          }
-          
-          clearAction();
-        });
-    }
-    else  {
-      document.body.className = 'not_connected';
-    
-      clearAction();
-    }
+function handleStatusChange(response) {	   
+	estadoFacebook = response.status;
+	if (response.status === 'connected') {
+		// the user is logged in and has authenticated your
+		// app, and response.authResponse supplies
+		// the user's ID, a valid access token, a signed
+		// request, and the time the access token 
+		// and signed request each expire
+		
+		/*
+		 * Mostramos el botón de logout en los ajustes
+		 */      	
+		$('#btnFBLogin').removeClass('boton-Azul').addClass('boton-Rojo').off('click',promptLogin).on('click',uninstallApp).html("<i class='icon-facebook-sign'></i>  "+res_eliminar_permisos);	
+		
+	} else if (response.status === 'not_authorized') {
+		// the user is logged in to Facebook, 
+		// but has not authenticated your app
+		if (device.platform == "iOS"){
+			/*
+		 	* Mostramos el botón de login en los ajustes
+		 	*/
+			
+			$('#btnFBLogin').removeClass('boton-Rojo').addClass('boton-Azul').off('click',uninstallApp).on('click',promptLogin).html("<i class='icon-facebook-sign'></i>  Log in");
+		}
+		logout(); 
+		
+		navigator.notification.alert('Error getting user info: ' + JSON.stringify(response.error));
+        console.log('Error getting user info: ' + JSON.stringify(response.error));
+        navigator.notification.alert("The app was removed. Please log in again.");
+	} else {
+		console.log("No hay sesion de facebook");
+		if (device.platform == "iOS"){
+			/*
+		 	* Mostramos el botón de login en los ajustes
+		 	*/			
+			$('#btnFBLogin').removeClass('boton-Rojo').addClass('boton-Azul').off('click',uninstallApp).on('click',promptLogin).html("<i class='icon-facebook-sign'></i>  Log in");
+		}
+	}
 }
-
+function getUserInfo(){
+	FB.api('/me', function(me){
+		console.log(JSON.stringify(me));
+		if (me.id) {
+	    	uid = me.id;
+	        console.log(uid);
+	    }
+	});
+}
 //Check the current permissions to set the page elements.
 //Pass back a flag to check for a specific permission, to
 //handle the cancel detection flow.
+function checkUserPermissions(permissionToCheck) {
+  var permissionsFQLQuery = 'SELECT ' + permissions.join() + ' FROM permissions WHERE uid = me()';
+  FB.api('/fql', { q: permissionsFQLQuery },
+    function(response) {
+      if (estadoFacebook == 'connected') {         
+          if (permissionToCheck) {
+            if (response.data[0][permissionToCheck] == 1) {
+              navigator.notification.alert("The '" + permissionToCheck + "' permission has been granted.");
+              return true;
+            } else {
+              navigator.notification.alert('You need to grant the ' + permissionToCheck + ' permission before using this functionality.');              
+            } return false;
+          }
+          return true;
+      }
+  });
+}
+/*
 function checkUserPermissions(permissionToCheck) {
   var permissionsFQLQuery = 'SELECT ' + permissions.join() + ' FROM permissions WHERE uid = me()';
   FB.api('/fql', { q: permissionsFQLQuery },
@@ -96,6 +116,7 @@ function checkUserPermissions(permissionToCheck) {
       }
   });
 }
+*/
 
 //Prompt the user to login and ask for the 'email' permission
 function promptLogin() {
@@ -113,19 +134,31 @@ function promptPermission(permission) {
 
 //See https://developers.facebook.com/docs/reference/api/user/#permissions
 function uninstallApp() {
-  FB.api('/me/permissions', 'DELETE',
-    function(response) {
-      //window.location.reload();
-      // For may instead call logout to clear
-      // cache data, ex: using in a PhoneGap app
-      console.log('APP Uninstalled');
-      logout();
-  });
+	navigator.notification.confirm(res_quitar_permisos_fb,
+		function(buttonIndex){
+			if (buttonIndex == 2){
+				console.log("Boton 2 SI");
+				FB.api('/me/permissions', 'DELETE',
+			    	function(response) {
+				      	//window.location.reload();
+				      	// For may instead call logout to clear
+				      	// cache data, ex: using in a PhoneGap app
+				      	console.log('APP Uninstalled');
+				      	estadoFacebook="not_connected";
+				      	console.log("Hacemos log out");
+						     
+				        if (device.platform == "iOS"){
+							$('#btnFBLogIn').removeClass('boton-Rojo').addClass('boton-Azul').on('click',promptLogin).html("Facebook Log in");
+						}
+						logout();
+					});
+			}			
+	},
+	res_titulo_permisos_fb,
+	res_No+","+res_Si);
 }
 
 //See https://developers.facebook.com/docs/reference/javascript/FB.logout/
 function logout() {
-  FB.logout(function(response) {
-    window.location.reload();
-  });
+  FB.logout();
 }

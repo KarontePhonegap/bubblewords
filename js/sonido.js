@@ -183,9 +183,38 @@ function ReproducirSonido(event){
 			directorio.getFile(tarjetaActual.sonido, {create:false, exclusive:false}, function(fichero){
 				//console.log("Se accede al achivo " + tarjetaActual.sonido);
 				//console.log("Su ruta completa es: "+fichero.fullPath);
+				$('#btnTarjetaSonido').addClass('ui-btn-favorito');
+				mediaRec = new Media(fichero.fullPath, onSuccessReproduccion, onErrorReproduccion);
+				var mediaTimer=null;
+				mediaRec.play();
+				/*
+				 * Creamos un intervalo y lo establecemos a 200ms
+				 * este intervalo comprueba la posicion de la reproduccion actual, y en caso de que
+				 * la posicion sea menor que 0 significará que se ah terminado la reproducción
+				 * por lo que podemos quitar la clase al boton de reproduccion.
+				 */
+				if (mediaTimer == null) {
+                	mediaTimer = setInterval(function() {
+                    	// get my_media position
+                    	mediaRec.getCurrentPosition(
+	                        // success callback
+	                        function(position) {
+	                        	//console.log("El audio esta en la posicion: "+position+" sec")
+	                            if (position < 0 ) {
+	                            	$('#btnTarjetaSonido').removeClass('ui-btn-favorito');
+	                            	clearInterval(mediaTimer);
+	                            }
+	                        },
+	                        // error callback
+	                        function(e) {
+	                            console.log("Error getting sound pos=" + e);	                            
+	                        }
+	                    );
+	                }, 200);
+	            }
 
-				mediaRec = new Media(fichero.fullPath, onSuccessReproduccion, onErrorReproduccion);	
-				mediaRec.play();				
+				
+				
 			}, function(error3){
 				//console.log("No se ha podido abrir el archivo " + tarjetaActual.sonido + ": " + error3.code);
 			});

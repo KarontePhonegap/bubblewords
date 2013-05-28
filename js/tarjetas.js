@@ -11,6 +11,7 @@ var valorAnteriorTitulo="";
 var anchoiPhone3 = 80;
 var anchoiPhone4 = 160;
 var anchoTablet = 230;
+var estadoServidor =false; //Guarda el estado del servidor de traduccion, si es false el servidor no esta disponible
 
 /*
 var fondosTarjeta = [{'id':1, 'nombre':'fondo 1', 'imagen': 'img/texturas/textura1.jpg', 'iPhone3': 'img/texturas/muestras/textura1_320.jpg', 'iPhone4': 'img/texturas/muestras/textura1_640.jpg', 'tablet': 'img/texturas/muestras/textura1.jpg'},
@@ -586,7 +587,9 @@ function getAccessToken(){
 		type: "GET",
 		dataType: 'jsonp',
 		success: function(data){
+			console.log("AccessToken Recibido");
    			accessToken=data[0];
+   			estadoServidor=true;
     		//navigator.notification.confirm("Hemos obtenido el token de acceso: "+accessToken)
     		if (intervaloSinConexion){
 				clearInterval(intervaloSinConexion);
@@ -598,6 +601,7 @@ function getAccessToken(){
 		},
 		timeout:5000,
 		error: function(x, t, m) {
+			console.log("AccessToken No recibido");
 			if (hayConexion ==true){
 				/*
 				*En caso de que se tenga conexion de red, pero no sea accesible el servicio web que nos devuelve el token de acceso
@@ -610,23 +614,20 @@ function getAccessToken(){
 					console.warn("El servidor no esta disponible, cambiamos el intervalo a 30 segundos");
 					intervaloSinConexion = setInterval(getAccessToken, 30 * 1000);
 				}
-				if(t==="timeout") {
-			    	navigator.notification.confirm(res_servidor_no_disponible,'',res_titulo_servidor_no_disponible,res_Aceptar);
+				if(t==="timeout") {					
+					if (estadoServidor==true){
+			    		navigator.notification.confirm(res_servidor_no_disponible,'',res_titulo_servidor_no_disponible,res_Aceptar);
+			    }
+			    estadoServidor=false;
 			    } else {
-			    	navigator.notification.confirm(res_servidor_no_disponible+" Error: "+t,'',res_titulo_servidor_no_disponible,res_Aceptar);
+			    	if (estadoServidor==true){
+			    		navigator.notification.confirm(res_servidor_no_disponible+" Error: "+t,'',res_titulo_servidor_no_disponible,res_Aceptar);
+			    	}
+			    estadoServidor=false;
 			    }
 			}
     	}
-	});
-/*
-	$.getJSON(urlObtenerAccesToken + '?callback=?'
-	, function(data){
- 	    accessToken=data[0];
- 	    //navigator.notification.confirm("Hemos obtenido el token de acceso: "+accessToken)
-	});
-	*/
-    PararEvento(event);
-    
+	});    
 }
 /*
  * Obtiene la traducción de un texto proporcionandole un idioma de origen y destino

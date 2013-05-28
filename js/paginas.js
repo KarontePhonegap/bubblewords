@@ -13,17 +13,25 @@ var intervaloNormal, intervaloSinConexion,intervaloComprobarConexion;
 var networkState;
 var numTraducciones=0;
 var alertMostrado = false;
+var uid,facebookAccessToken,estadoFacebook;
+var intervaloSwipe = null;
 function inicializar(){
+	/*
+	FB.init({
+		appId: "191807040969117",
+		nativeInterface: CDV.FB,
+		useCachedDialogs: false
+	});	
+	*/
+	//FB.getLoginStatus(handleStatusChange);
+	
+	
+	
 	
 	//console.log("Phonegap inicializado");	
 	// Abre la base de datos
 	
-	if (navigator.userAgent.indexOf("Android") != -1){
-		$.mobile.defaultPageTransition = 'none';
-		$.mobile.defaultDialogTransition = 'none';                                       
-	}else{
-		$.mobile.touchOverflowEnabled = true;		
-	}
+	
 	
 	ObtenerIdiomaSistema();
 	AbrirBDD();
@@ -31,8 +39,6 @@ function inicializar(){
 	//cargarIdiomas();	
 	comprobarTablas();	
 	ObtenerAppData();
-	
-
 	
 	
 	//Declaramos los event handlers para cuando se obtiene o pierde la conexion.
@@ -72,32 +78,50 @@ function inicializar(){
 	function alertCallBack(){
 		console.log("Se ha cerrado el alert");
 	}
-
-	$('#PaginaDetalleTarjeta').on('pageshow',function(){  	
-		//update($(this).find('.jtextfill span'));
-		$('.jtextfill').textfill({maxFontPixels: 200});
-		if (tarjetaActual.sonido ==""){
-			$('#btnTarjetaSonido i').addClass('desactivado');
-			$('#btnTarjetaSonido').addClass('btn-desactivado');
+	
+	$('#PaginaDetalleTarjeta').on('pagebeforeshow',function(){
+		compruebaSonido();		
+		if(device.platform.toUpperCase()=="IOS"){
+			if (estadoFacebook!=null && estadoFacebook === "connected"){
+				$('#btnCompartirFB i').removeClass('desactivado');
+				$('#btnCompartirFB').removeClass('btn-desactivado').on('click',publishStory);
+			}else{	
+				$('#btnCompartirFB i').addClass('desactivado');
+				$('#btnCompartirFB').addClass('btn-desactivado').off('click',publishStory);
+			}					
 		}else{
-			$('#btnTarjetaSonido i').removeClass('desactivado');
-			$('#btnTarjetaSonido').removeClass('btn-desactivado');
+			$('#btnCompartirFB').on('click',publishStory);
 		}
 		
 		console.log("Hay "+tarjetasPorCategoria.length+" tarjetas en esta categoria");
 		if (listaCategorias.length > 0 && tarjetasPorCategoria.length==2 && mostrarTutorial){			
 			$('#TutorialTarjetas div p').html(res_tutorial_tarjetas);
-			$('#TutorialTarjetas').fadeIn().css('z-index','200').on('touchstart',function(){				
-				$('#TutorialTarjetas').fadeOut();
-				mostrarTutorial=false;
-				bwBD.transaction(function(tx){
-					console.log("Intentamos insertar registro en appdata");
-					tx.executeSql("INSERT INTO AppData VALUES('FALSE')");
-				},errorBD,ComprobacionCorrecta);
-			});			
+			$('#TutorialTarjetas img').css('left','-'+$(this).width()/2+'px');
+			//$('#PaginaDetalleTarjeta_content a').css('position','relative').css('left','-'+window.innerWidth/2+'px');
+			
+			var animaImagenSwipe= function (){
+				$('#TutorialTarjetas img').animate({left:(window.innerWidth-($(this).width()/4)).toString()+'px'},2000,'linear',function(){
+					$(this).animate({left:'-'+$(this).width()/2+'px'},2000,'linear');					
+				});
+				
+				/*$('#PaginaDetalleTarjeta_content a').animate({left:(window.innerWidth/2).toString()+'px'},2000,'linear',function(){
+					$(this).animate({left:'-'+window.innerWidth/2+'px'},2000,'linear');					
+				});
+				*/
+			}
+			animaImagenSwipe();
+			intervaloSwipe = setInterval(function(){
+				animaImagenSwipe();
+			},4000);
+			
+			$('#TutorialTarjetas').fadeIn().css('z-index','200');
+			$(window).on('touchstart',cerrarTutorial);
 		}
-		
-		
+	});
+	
+	$('#PaginaDetalleTarjeta').on('pageshow',function(){  	
+		//update($(this).find('.jtextfill span'));
+		$('.jtextfill').textfill({maxFontPixels: 200});		
 	}).on('swipeleft',function(event){
 		for (var i=0;i<tarjetasPorCategoria.length;i++){
 			if (tarjetasPorCategoria[i].id>tarjetaActual.id){
@@ -140,36 +164,62 @@ function inicializar(){
 			}
 		}		
 	});
-			
+	
+	
+	
+	
 	
 	document.addEventListener("backbutton",onBackButton,false);
 	// Detección del dispositivo
 	DetectarDimensiones();
 	navigator.splashscreen.hide();
 	//Inicializamos Facebook
-	var gAppID = '191807040969117';
-	
-	FB.init({
-		appId: gAppID,
-		nativeInterface: CDV.FB,
-		useCachedDialogs: false
-	});	   
-	FB.getLoginStatus(handleStatusChange);
-	authUser();
-	updateAuthElements();
-	
-	/*
-	
-	FB.init({
-		appId: gAppID,
-		nativeInterface: CDV.FB,
-		status     : true,
-		useCachedDialogs: false
-  	});
-	FB.Event.subscribe('auth.statusChange', handleStatusChange);
-	FB.getLoginStatus(handleStatusChange);
-	*/
+
+	try{
+		FB.init({
+			appId: "191807040969117",
+			nativeInterface: CDV.FB,
+			useCachedDialogs: false
+		});	
+		FB.getLoginStatus(handleStatusChange);
+		authUser();
+		updateAuthElements();
+		
+		if (device.platform == "Android"){
+			$.mobile.defaultPageTransition = 'none';
+			$.mobile.defaultDialogTransition = 'none';
+			$('#btnFBLogin').addClass('boton-Rojo').on('click',uninstallApp).html("<i class='icon-facebook-sign'></i>  "+res_eliminar_permisos);
+		}else if (device.platform=="iOS"){
+			$.mobile.touchOverflowEnabled = true;
+			$('#btnFBLogin').addClass('boton-Azul').on('click',promptLogin).html("<i class='icon-facebook-sign'></i>  Log in");
+		}
+		
+	}catch(e){
+		console.error("Error loading Facebook Plugin: "+e);
+	}
 }
+function cerrarTutorial(){
+	$('#TutorialTarjetas').fadeOut();				
+	clearInterval(intervaloSwipe);	
+	intervaloSwipe=null;						
+	mostrarTutorial=false;
+	bwBD.transaction(function(tx){
+		console.log("Intentamos insertar registro en appdata");
+		tx.executeSql("INSERT INTO AppData VALUES('FALSE')");
+	},errorBD,ComprobacionCorrecta);
+	$(window).off('touchstart',cerrarTutorial);
+}
+
+function compruebaSonido(){
+	if (tarjetaActual.sonido ==""){
+		$('#btnTarjetaSonido i').addClass('desactivado');
+		$('#btnTarjetaSonido').addClass('btn-desactivado');
+	}else{
+		$('#btnTarjetaSonido i').removeClass('desactivado');
+		$('#btnTarjetaSonido').removeClass('btn-desactivado');
+	}
+}
+
 /*
  * Funcion que realiza la animación a la hora de cambiar de bubble y actualiza la información.
  * 
@@ -184,6 +234,7 @@ function animaBubble(event, elemento, hacia, i){
 		    left:'-'+elemento.css('width').toString()
 		},500,'swing',function(){
 			CargarTarjeta(event,tarjetasPorCategoria[i].id,true);
+			compruebaSonido();
 			elemento.css('left',elemento.css('width'));		 	
 		 	elemento.animate({left:'0px'},500);
 		});
@@ -192,6 +243,7 @@ function animaBubble(event, elemento, hacia, i){
 		    left:elemento.css('width').toString()
 		},500,'swing',function(){
 			CargarTarjeta(event,tarjetasPorCategoria[i].id,true);
+			compruebaSonido();
 			elemento.css('left','-'+elemento.css('width').toString());		 	
 		 	elemento.animate({left:'0px'},500);
 		});
@@ -202,7 +254,7 @@ function animaBubble(event, elemento, hacia, i){
 
 
 
-/* YA NO ES NECESARIO
+/* 
  * 
  * Comprueba el estado de la conexión al iniciar la aplicación para notificar si las funciones de traducción
  * estarán disponibles ,se ejecuta despues de cargar los recursos de idiomas.
@@ -216,45 +268,6 @@ function checkConnection() {
 		conConexion();
 	}	
 }
-
-/*
-function checkConnection() {
-	networkState = navigator.connection.type;
-    
-    var states = {};
-    states[Connection.UNKNOWN]  = 'Unknown connection';
-    states[Connection.ETHERNET] = 'Ethernet connection';
-    states[Connection.WIFI]     = 'WiFi connection';
-    states[Connection.CELL_2G]  = 'Cell 2G connection';
-    states[Connection.CELL_3G]  = 'Cell 3G connection';
-    states[Connection.CELL_4G]  = 'Cell 4G connection';
-    states[Connection.NONE]     = 'No network connection';
-	
-	
-     if (networkState == Connection.NONE){    	
-		hayConexion =false;
-		//if(intervaloComprobarConexion==null){
-			//Informamos al usuario de que no hay conexión.
-			navigator.notification.alert(
-			    res_conexion_no_disponible,  // message
-			    '',         // callback
-			    res_titulo_conexion,            // title
-			    res_Aceptar                 // buttonName
-			);
-			//console.log("El intervalo de comprobacion de conexion no existe, lo creamos");
-			//intervaloComprobarConexion= setInterval(checkConnection,30000);//Intervalo de 30 segundos. Modificar segun necesidad
-		//}else{
-			console.log("El intervalo de comprobacion de conexion existe, pero sigue sin haber conexion.");
-		//}
-	}else{
-		//console.log("Conexión reestablecida. Quitamos el intervalo de comprobacion de conexion");
-		//clearInterval(intervaloComprobarConexion);
-		hayConexion =true;
-	}
-	
-}
-*/
-
 
 
 /*
@@ -287,10 +300,7 @@ function onBackButton(event){
 	if ( $('.ui-page-active').attr('id')=="PaginaInicial"){
 		navigator.app.exitApp();
 	}else{
-		tarjetaEnEdicion = false;
-		if (categoriasEnEdicion == true){
-			reiniciaCategorias();
-		}	
+		cerrarTutorial();
 		Volver(event);		
 	}	
 }
@@ -333,7 +343,11 @@ function mensajeActualizar(mensaje){
 /**
  * Volver. Retrocede una posición en la historia (para el botón 'Atrás')
  */
-function Volver(e){
+function Volver(e){	
+	tarjetaEnEdicion = false;	
+	if (categoriasEnEdicion == true){
+		reiniciaCategorias();
+	}	
 	e.stopPropagation();
 	e.preventDefault();
 	history.back();	
@@ -350,7 +364,6 @@ function Volver2Veces(e){
  * @param	event		evento que se desea parar
  */
 function PararEvento(event){
-	
 	event.stopPropagation();
 	event.preventDefault();
 }
@@ -859,17 +872,15 @@ $('#btnCambiarTarjetaFavorita').on('touchStart click', function(event){
 	navigator.notification.vibrate(50);
 	if (tarjetaActual.favorita == 0)  {
 		tarjetaActual.favorita = 1;
-		$('#btnCambiarTarjetaFavorita').addClass("ui-btn-favorito");
-		
-
+		$('#btnCambiarTarjetaFavorita').addClass("ui-btn-favorito");		
 		//console.log("Tarjeta cambiada a favorita");
-	}
-	else {
+		ActualizarTarjeta(event,tarjetaActual);
+	}else{
 		tarjetaActual.favorita = 0;
-		$('#btnCambiarTarjetaFavorita').removeClass("ui-btn-favorito");
-		//console.log("Tarjeta cambiada a no favorita");
-	}
-	ActualizarTarjeta(event,tarjetaActual);
+		$('#btnCambiarTarjetaFavorita').removeClass("ui-btn-favorito");		
+		ActualizarTarjeta(event,tarjetaActual);
+		CargarCategoria(event,0,true);
+	}	
 	PararEvento(event);
 });
 

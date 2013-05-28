@@ -1,6 +1,6 @@
 /*--- PROPIEDADES ---*/
 var bwBD;
-
+var animaImagen;
 /*--- MÉTODOS RELACIONADOS ---*/
 function AbrirBDD(){
 	bwBD = window.openDatabase("bubbleWords", "1.0", "Bubble Words", 2000000);
@@ -91,14 +91,14 @@ function TarjetasObtenidas(tx, results){
  * EliminarTodo. Elimina toda la información de las tablas Categorias y Tarjetas.
  */
 function EliminarTodo(){
-	console.log("Contenido de las tablas antes de borrar");
-	comprobarTablas();
+	//console.log("Contenido de las tablas antes de borrar");
+	//comprobarTablas();
 	bwBD.transaction(function(tx){		
 		tx.executeSql('DELETE FROM Tarjetas WHERE 1');
 		tx.executeSql('DELETE FROM Categorias WHERE 1');
 		//comprobarBD(tx);
-		console.log("Contenido de las tablas despues de borrar");
-		comprobarTablas();
+		//console.log("Contenido de las tablas despues de borrar");
+		//comprobarTablas();
 	}, errorBD, ComprobacionCorrecta);
 }
 
@@ -110,31 +110,49 @@ function ObtenerTarjetasPorCategoria(idCategoria){
 		tx.executeSql("select * from Tarjetas where categoria ="+idCategoria +" order by id", [], ConsultarTarjetasPorCategoria);
 	}, errorBD, ComprobacionCorrecta);
 	
+	
 }
 
 function ObtenerTarjetasFavoritas(){
 	//navigator.notification.alert("Entramos en ObtenerIdiomas")
 	bwBD.transaction(function(tx){
-		//navigator.notification.alert("Llamamos a ConsultarIdiomas")
-		
+		//navigator.notification.alert("Llamamos a ConsultarIdiomas")		
 		tx.executeSql("select * from Tarjetas where favorita = 1 order by id", [], ConsultarTarjetasPorCategoria);
-	}, errorBD, ComprobacionCorrecta);
-	
+	}, errorBD, function(){	
+			
+		if(tarjetasPorCategoria.length<1){
+			if (animaImagen!=undefined)
+				clearInterval(animaImagen);
+				
+			$('#TarjetasVacias').fadeIn('slow');
+			$('#TarjetasVacias p').html(res_no_favoritos);
+			animaImagen = setInterval(function(){
+				if ($('#TarjetasVacias img').attr('src')=== "img/guia/favoritos.png"){
+					$('#TarjetasVacias img').attr('src','img/guia/favoritos2.png');
+				}else{
+					$('#TarjetasVacias img').attr('src','img/guia/favoritos.png');
+				}
+			},1000)
+			
+		}else{
+			clearInterval(animaImagen);
+			$('#TarjetasVacias').fadeOut('slow');
+		}
+	});
 }
 
 function ConsultarTarjetasPorCategoria(tx,results){  
-	//navigator.notification.alert("Obtenemos las tarjetas por categorias")  
-   if(results.rows.length > 0){
-   		tarjetasPorCategoria = [];  
-        for (var i=0; i < results.rows.length; i++) {
-		var tarjeta = results.rows.item(i);
-		tarjetasPorCategoria.push({'id': tarjeta.id, 'categoria': tarjeta.categoria, 'titulo1': tarjeta.titulo1, 
-		'titulo2': tarjeta.titulo2, 'fondo': tarjeta.fondo, 'foto': tarjeta.foto, 'sonido': tarjeta.sonido, 
-		'favorita': tarjeta.favorita, 'anchoFoto': tarjeta.anchoFoto, 'altoFoto': tarjeta.altoFoto, 'fuente':tarjeta.fuente,
-		'idiomaDe':tarjeta.idiomaDe,'idiomaA':tarjeta.idiomaA});
-
+	//navigator.notification.alert("Obtenemos las tarjetas por categorias")
+	tarjetasPorCategoria = [];    
+   	if(results.rows.length > 0){   		
+		for (var i=0; i < results.rows.length; i++) {
+			var tarjeta = results.rows.item(i);
+			tarjetasPorCategoria.push({'id': tarjeta.id, 'categoria': tarjeta.categoria, 'titulo1': tarjeta.titulo1, 
+			'titulo2': tarjeta.titulo2, 'fondo': tarjeta.fondo, 'foto': tarjeta.foto, 'sonido': tarjeta.sonido, 
+			'favorita': tarjeta.favorita, 'anchoFoto': tarjeta.anchoFoto, 'altoFoto': tarjeta.altoFoto, 'fuente':tarjeta.fuente,
+			'idiomaDe':tarjeta.idiomaDe,'idiomaA':tarjeta.idiomaA});
 		}
-    }
+    }    
 }
 
 //Consultamos si el tutorial se ha terminado

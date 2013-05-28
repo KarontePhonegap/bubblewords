@@ -109,6 +109,7 @@ res_TextoTutorial4="Bubble Words makes the process of creating the card of vocab
 res_TextoTutorial5="Bubble Words gives us the possibility to create our own custom dictionaries, grouping vocabulary for each specialty, profession, technology, or event, and implement them over time.";
 res_TextoTutorial6="Bubble Words is designed to work quickly on the ground, taking party to the work of our daily lives, as we enrich our vocabulary related to work, leisure, tourism, culture, or university education.";
 
+
 //Compartir en FaceBook
 res_Compartir_Subtitulo="I'm using Bubble Words in my smartphone to improve my language skills";//revisar traduccion
 res_Compartir="I want to share this bubble: ";//revisar traduccion
@@ -122,7 +123,7 @@ res_guia_2_titulo="Creating our first category";//revisar traduccion
 res_guia_3="Now we will create our first bubble, remember that you must fill it's name and translation, furthermore, you can add images, recordings, wallpapers, etc. to your bubbles so you can customize them.";//revisar traduccion
 res_guia_3_titulo="Creating our first bubble";//revisar traduccion
 res_tutorial_tarjetas="To navigate between Bubbles, slide your finger to the sides ";//revisar traduccion
-
+res_no_favoritos="You haven't added any bubble to your favourites yet, to do so, you only have to tap the favourite button.";
 //Version Lite
 //COMPROBAR TRADUCCION
 
@@ -138,6 +139,11 @@ if (maxCategorias>1){
 res_lite_categorias+='\nIf you want to create more, you can buy the full version now.';
 res_lite_traducciones='Remember that with lite verison you can only translate '+maxTraducciones+' times.\nIf you want to translate more, you can buy the full version now.'
 
+
+//Facebook
+res_quitar_permisos_fb="Are you sure that you want to remove the publish permission on Facebook?";//revisar traduccion
+res_titulo_permisos_fb="Publish Permission";//revisar traduccion
+res_eliminar_permisos="Remove Facebook permissions";//revisar
 
 //otros
 res_servidor_no_disponible="Not possible to connect to the translation server. Translate service is not available.";//revisar traduccion
