@@ -125,9 +125,9 @@ res_lite_botones='Comprar,Más Tarde';
 res_lite_bubbles='Recuerde que la versión lite sólo le permite crear '+maxBubbles+' Bubbles.\nSi desea crear más puede comprar la versión completa ahora.';
 res_lite_categorias='Recuerde que la versión lite sólo le permite crear '+maxCategorias;
 if (maxCategorias>1){
-    res_lite_categorias+='categorias.'
+    res_lite_categorias+=' categorias.'
 }else{
-    res_lite_categorias+='categoría.'
+    res_lite_categorias+=' categoría.'
 }
 res_lite_categorias+='\nSi desea crear mas puede comprar la versión completa ahora.';
 res_lite_traducciones='Recuerde que la versión lite sólo le permite traducir '+maxTraducciones+' veces.\nSi desea traducir más puede comprar la versión completa ahora.'
