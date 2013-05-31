@@ -57,11 +57,20 @@ Karonte. Servicios en Internet. S.L.
 <!-- Android - min sdk -->
 <preference name="android-minSdkVersion" value="9" />
 
+
 <!-- Acceso a direcciones web -->
+
 <access origin="http://www.bubblewords.info" subdomains="true" />
 <access origin="http://api.microsofttranslator.com" subdomains="true" />
 
-
+<!-- Activar cunado se active facebook 
+<access origin="*.facebook.*" subdomains="true" />
+<access origin="m.facebook.com" subdomains="true" />
+<access origin="graph.facebook.com" subdomains="true" />
+<access origin="api.facebook.com" subdomains="true" />
+<access origin="*.fbcdn.net" subdomains="true" />
+<access origin="*.akamaihd.net" subdomains="true" />
+-->
 
 
 <!-- Propiedades habilitadas -->
@@ -72,11 +81,11 @@ Karonte. Servicios en Internet. S.L.
 <feature name="http://api.phonegap.com/1.0/notification"/>
 
 <!-- Plugins necesarios -->
-
+<!-- Desactivamos Facebook
 <gap:plugin name="FacebookConnect">
 	<param name="APP_ID" value="191807040969117" />
 </gap:plugin>
-
+ -->
 
 
 <!-- Para Android -->
@@ -91,5 +100,8 @@ Karonte. Servicios en Internet. S.L.
 <plugin name="Notification" value="CDVNotification" />
 <plugin name="Camera" value="CDVCamera" />
 
-</widget>
+<!-- Activar cunado se active facebook 
+<plugin name="InAppBrowser" value="CDVInAppBrowser" />
+ -->
 
+</widget>

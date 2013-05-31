@@ -13,29 +13,6 @@ var anchoiPhone4 = 160;
 var anchoTablet = 230;
 var estadoServidor =false; //Guarda el estado del servidor de traduccion, si es false el servidor no esta disponible
 
-/*
-var fondosTarjeta = [{'id':1, 'nombre':'fondo 1', 'imagen': 'img/texturas/textura1.jpg', 'iPhone3': 'img/texturas/muestras/textura1_320.jpg', 'iPhone4': 'img/texturas/muestras/textura1_640.jpg', 'tablet': 'img/texturas/muestras/textura1.jpg'},
-{'id':2, 'nombre':'fondo 2', 'imagen': 'img/texturas/textura2.jpg', 'iPhone3': 'img/texturas/muestras/textura2_320.jpg', 'iPhone4': 'img/texturas/muestras/textura2_640.jpg', 'tablet': 'img/texturas/muestras/textura2.jpg'},
-{'id':3, 'nombre':'fondo 3', 'imagen': 'img/texturas/textura3.jpg', 'iPhone3': 'img/texturas/muestras/textura3_320.jpg', 'iPhone4': 'img/texturas/muestras/textura3_640.jpg', 'tablet': 'img/texturas/muestras/textura3.jpg'},
-{'id':4, 'nombre':'fondo 4', 'imagen': 'img/texturas/textura4.jpg', 'iPhone3': 'img/texturas/muestras/textura4_320.jpg', 'iPhone4': 'img/texturas/muestras/textura4_640.jpg', 'tablet': 'img/texturas/muestras/textura4.jpg'},
-{'id':5, 'nombre':'fondo 5', 'imagen': 'img/texturas/textura5.jpg', 'iPhone3': 'img/texturas/muestras/textura5_320.jpg', 'iPhone4': 'img/texturas/muestras/textura5_640.jpg', 'tablet': 'img/texturas/muestras/textura5.jpg'},
-{'id':6, 'nombre':'fondo 6', 'imagen': 'img/texturas/textura6.jpg', 'iPhone3': 'img/texturas/muestras/textura6_320.jpg', 'iPhone4': 'img/texturas/muestras/textura6_640.jpg', 'tablet': 'img/texturas/muestras/textura6.jpg'},
-{'id':7, 'nombre':'fondo 7', 'imagen': 'img/texturas/textura7.jpg', 'iPhone3': 'img/texturas/muestras/textura7_320.jpg', 'iPhone4': 'img/texturas/muestras/textura7_640.jpg', 'tablet': 'img/texturas/muestras/textura7.jpg'},
-{'id':8, 'nombre':'fondo 8', 'imagen': 'img/texturas/textura8.jpg', 'iPhone3': 'img/texturas/muestras/textura8_320.jpg', 'iPhone4': 'img/texturas/muestras/textura8_640.jpg', 'tablet': 'img/texturas/muestras/textura8.jpg'},
-{'id':9, 'nombre':'fondo 9', 'imagen': 'img/texturas/textura9.jpg', 'iPhone3': 'img/texturas/muestras/textura9_320.jpg', 'iPhone4': 'img/texturas/muestras/textura9_640.jpg', 'tablet': 'img/texturas/muestras/textura9.jpg'},
-{'id':10, 'nombre':'fondo 10', 'imagen': 'img/texturas/textura10.jpg', 'iPhone3': 'img/texturas/muestras/textura10_320.jpg', 'iPhone4': 'img/texturas/muestras/textura10_640.jpg', 'tablet': 'img/texturas/muestras/textura10.jpg'},
-{'id':11, 'nombre':'fondo 11', 'imagen': 'img/texturas/textura11.jpg', 'iPhone3': 'img/texturas/muestras/textura11_320.jpg', 'iPhone4': 'img/texturas/muestras/textura11_640.jpg', 'tablet': 'img/texturas/muestras/textura11.jpg'},
-{'id':12, 'nombre':'fondo 12', 'imagen': 'img/texturas/textura12.jpg', 'iPhone3': 'img/texturas/muestras/textura12_320.jpg', 'iPhone4': 'img/texturas/muestras/textura12_640.jpg', 'tablet': 'img/texturas/muestras/textura12.jpg'},
-{'id':13, 'nombre':'fondo 13', 'imagen': 'img/texturas/textura13.jpg', 'iPhone3': 'img/texturas/muestras/textura13_320.jpg', 'iPhone4': 'img/texturas/muestras/textura13_640.jpg', 'tablet': 'img/texturas/muestras/textura13.jpg'},
-{'id':14, 'nombre':'fondo 14', 'imagen': 'img/texturas/textura14.jpg', 'iPhone3': 'img/texturas/muestras/textura14_320.jpg', 'iPhone4': 'img/texturas/muestras/textura14_640.jpg', 'tablet': 'img/texturas/muestras/textura14.jpg'},
-{'id':15, 'nombre':'fondo 15', 'imagen': 'img/texturas/textura15.jpg', 'iPhone3': 'img/texturas/muestras/textura15_320.jpg', 'iPhone4': 'img/texturas/muestras/textura15_640.jpg', 'tablet': 'img/texturas/muestras/textura15.jpg'}];
-
-
-var tarjetasModificadas = new Array();
-tarjetasModificadas[1]  = new Array();
-tarjetasModificadas[2]  = new Array();
-*/
-
 /*--- MÉTODOS ---*/
 
 /**
@@ -70,37 +47,7 @@ function RepresentarListaTarjetas(categoria, favoritas){
 	}
 	else {
 		ancho = anchoTablet;
-	}
-	/*
-	// Inclusión de las tarjetas, en la lista correspondiente
-	$.each(listaTarjetas, function(i, item) {		
-		console.log("Comprobamos esta tarjeta para añadirla a la categoría ("+categoria.id+"): "+item.id+" con la categoria: "+item.categoria);
-		if (  ( (favoritas) && (item.favorita == 1) ) || ( (!favoritas) && (item.categoria == categoria.id) ) ) {
-			
-			// Maquetación de la tabla que llevará cada una de las imágenes relacionadas con la tarjeta
-			texto += "<div><a href=\'javascript:;\' onClick=\'CargarTarjeta(event," + 
-                item.id + ", true)\' onTouchStart=\'(event," + item.id + ")\'><div style=\'overflow:hidden;width:" + ancho + "px;height:" + 
-                ancho + "px;border:1px solid;background-color:#ffffff\'><img id=\'img" + item.id + 
-                "\' src=\'img/imagen_no_disponible_" + ancho + ".jpg\' width=\'" + ancho + "\' />" + "</div></a></div>";
-			
-			listaImagenesACargar.push(item);
-			contador += 1;
-			
-		}
-	});
-	
-	// Se añaden los bloques vacíos que faltan en la última línea
-	switch(contador % 3){
-		case 0:
-			break;
-		case 1:
-			texto += "<div class=\'ui-block-b\'></div><div class=\'ui-block-c\'></div>";
-			break;
-		case 2:
-			texto += "<div class=\'ui-block-c\'></div>";
-			break;
-	}
-	*/
+	}	
 	var columna =1;
 	
 	$.each(listaTarjetas, function(i, item) {		
@@ -120,14 +67,11 @@ function RepresentarListaTarjetas(categoria, favoritas){
 			if (columna ==4){
 				texto+="</tr>";
 				columna=1;
-			}
-			
+			}			
 			listaImagenesACargar.push(item);
-			contador += 1;
-			
+			contador += 1;			
 		}
 	});
-	
 	
 	// Actualización del grid de imágenes
 	//console.log("Este es el texto: " + texto);
